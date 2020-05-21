@@ -12,9 +12,8 @@ public class GuiLogin {
     private JPasswordField passwordField;
     private static GuiLogin window ;
 
-    /**
-     * Launch the application.
-     */
+
+
     public static void main(String[] args) {
         launch();
     }
@@ -34,17 +33,11 @@ public class GuiLogin {
     }
 
 
-    /**
-     * Create the application.
-     */
     public GuiLogin() {
 
         initialize();
     }
 
-    /**
-     * Initialize the contents of the frame.
-     */
     public void initialize() {
         frame = new JFrame();
         frame.getContentPane().setForeground(new Color(0, 0, 0));
