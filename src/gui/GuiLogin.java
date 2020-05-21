@@ -87,7 +87,7 @@ public class GuiLogin {
         JLabel lblPassword = new JLabel("Password");
         lblPassword.setBounds(642, 290, 85, 24);
         frame.getContentPane().add(lblPassword);
-
+//
         txtProjetGlpoo = new JTextField();
         txtProjetGlpoo.setBackground(new Color(240, 248, 255));
         txtProjetGlpoo.setFont(new Font("Calibri Light", Font.BOLD, 34));
