@@ -1,5 +1,7 @@
 package gui;
 
+import server.Test;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -15,7 +17,9 @@ public class GuiLogin {
 
 
     public static void main(String[] args) {
-        launch();
+        //launch();
+        Test test = new Test();
+        test.zlatan();
     }
 
     public static void launch() {
