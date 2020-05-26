@@ -131,7 +131,21 @@ public class GuiRoom implements ActionListener{
                     //Réupération de l'heure de l'envoi
                     String timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
                     //Affichage du message dans le chatArea
-                    chatArea.append("Pseudo" + "  " + timeStamp + "\n" + message +"\n\n");
+                    int taille;
+                    if(message.length() <= 25) {
+                        chatArea.append("Pseudo" + "  " + timeStamp + "\n" + message + "\n\n");
+                    }
+                    if(message.length() > 25) {
+                        taille = 93;
+                        chatArea.append("Pseudo" + "  " + timeStamp + "\n" + message.substring(0,93) +"\n");
+                        while (taille <message.length())
+                            if (taille >= message.length()) {
+                                chatArea.append(message.substring(93, message.length()) + "\n");
+                            }else {
+                                taille+=93;
+                                chatArea.append(message.substring(taille-92, taille) + "\n");
+                            }
+                    }
                     try {
                         chatArea.setCaretPosition(chatArea.getLineEndOffset(chatArea.getLineCount() - 1));
                     } catch (BadLocationException ex) {

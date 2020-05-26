@@ -65,11 +65,11 @@ public class GuiLogin {
         lblNewLabel_1.setIcon(new ImageIcon("./files/image/loginImage.png"));
         panel.add(lblNewLabel_1);
 
-        Button button = new Button("Login");
-        button.addMouseListener(new MouseAdapter() {
+        Button buttonLogin = new Button("Login");
+        buttonLogin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
-                if(serverConnection.loginConnection(userNameField.getText(), String.valueOf(passwordField.getPassword()))) {
+                if(serverConnection.loginConnection(userNameField.getText(), String.valueOf(passwordField.getPassword())) && arg0.getSource()==buttonLogin) {
                     User user = new User(userNameField.getText(), String.valueOf(passwordField.getPassword()));
                     user.setId(serverConnection.giveId(user.getPseudo()));
                     System.out.println(user.getId());
@@ -81,12 +81,12 @@ public class GuiLogin {
                 }
             }
         });
-        button.setBackground(UIManager.getColor("List.dropLineColor"));
+        buttonLogin.setBackground(UIManager.getColor("List.dropLineColor"));
 
 
 
-        button.setBounds(642, 442, 271, 66);
-        frame.getContentPane().add(button);
+        buttonLogin.setBounds(642, 442, 271, 66);
+        frame.getContentPane().add(buttonLogin);
 
         userNameField = new JTextField();
         userNameField.setBackground(Color.LIGHT_GRAY);
