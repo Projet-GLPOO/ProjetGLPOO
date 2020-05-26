@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 
 public class GuiLogin {
     private JFrame frame;
-    private JTextField textField;
+    private JTextField userNameField;
     private JTextField txtProjetGlpoo;
     private JPasswordField passwordField;
     private static GuiLogin window ;
@@ -17,9 +17,9 @@ public class GuiLogin {
 
 
     public static void main(String[] args) {
-        //launch();
-        Test test = new Test();
-        test.zlatan();
+        launch();
+        /*Test test = new Test();
+        test.zlatan();*/
     }
 
     public static void launch() {
@@ -62,8 +62,14 @@ public class GuiLogin {
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
-                GuiRoom guiRoom = new GuiRoom();
-                guiRoom.launch();
+                Test test = new Test();
+                if(test.zlatan(userNameField.getText(), String.valueOf(passwordField.getPassword()))) {
+                    GuiRoom guiRoom = new GuiRoom();
+                    guiRoom.launch();
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Username or password error!");
+                }
             }
         });
         button.setBackground(UIManager.getColor("List.dropLineColor"));
@@ -73,11 +79,11 @@ public class GuiLogin {
         button.setBounds(642, 442, 271, 66);
         frame.getContentPane().add(button);
 
-        textField = new JTextField();
-        textField.setBackground(Color.LIGHT_GRAY);
-        textField.setBounds(642, 216, 347, 46);
-        frame.getContentPane().add(textField);
-        textField.setColumns(10);
+        userNameField = new JTextField();
+        userNameField.setBackground(Color.LIGHT_GRAY);
+        userNameField.setBounds(642, 216, 347, 46);
+        frame.getContentPane().add(userNameField);
+        userNameField.setColumns(10);
 
         JSeparator separator = new JSeparator();
         separator.setBackground(Color.BLACK);

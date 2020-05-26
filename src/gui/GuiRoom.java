@@ -5,14 +5,24 @@ import user.User;
 
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.JScrollPane;
+import javax.swing.text.BadLocationException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
+import java.sql.Date;
 
-public class GuiRoom {
+public class GuiRoom implements ActionListener{
 
     private JFrame frame;
-    private JTextField txtSalonDeDiscussion;
+    private JTextField nomSalonDeDiscussion;
+    private JTextArea chatArea;
+    private JTextArea messageToSendArea;
+    private JButton sendMessageButton;
     private Room room;
 
 
@@ -68,28 +78,36 @@ public class GuiRoom {
         frame.getContentPane().add(listContactUser);
 
 
-        JTextArea textArea = new JTextArea();
-        textArea.setBounds(12, 615, 766, 64);
-        frame.getContentPane().add(textArea);
+        messageToSendArea = new JTextArea();
+        messageToSendArea.setBounds(12, 615, 766, 64);
+        JScrollPane scrollMessageToSend = new JScrollPane(messageToSendArea);
+        scrollMessageToSend.setBounds(12, 615, 766, 64);
+        frame.getContentPane().add(scrollMessageToSend);
 
-        JButton btnNewButton = new JButton("Envoyer");
-        btnNewButton.setBounds(824, 626, 97, 25);
-        frame.getContentPane().add(btnNewButton);
+        sendMessageButton = new JButton("Envoyer");
+        sendMessageButton.setBounds(824, 626, 97, 25);
+        sendMessageButton.setActionCommand("SendAMessage");
+        sendMessageButton.addActionListener(this);
+        sendMessageButton.setEnabled(true);
+        frame.getContentPane().add(sendMessageButton);
 
         JList listMemberGroup = new JList();
         listMemberGroup.setBounds(825, 586, 125, -549);
         frame.getContentPane().add(listMemberGroup);
 
-        JTextArea textArea_1 = new JTextArea();
-        textArea_1.setBounds(240, 136, 538, 418);
-        frame.getContentPane().add(textArea_1);
+        chatArea = new JTextArea();
+        chatArea.setBounds(240, 136, 538, 418);
+        chatArea.setEditable(false);
+        JScrollPane scrollChat = new JScrollPane(chatArea);
+        scrollChat.setBounds(240, 136, 538, 418);
+        frame.getContentPane().add(scrollChat);
 
-        txtSalonDeDiscussion = new JTextField();
-        txtSalonDeDiscussion.setText("Salon de discussion");
-        txtSalonDeDiscussion.setBounds(371, 43, 285, 25);
-        txtSalonDeDiscussion.setEditable(false);
-        frame.getContentPane().add(txtSalonDeDiscussion);
-        txtSalonDeDiscussion.setColumns(10);
+        nomSalonDeDiscussion = new JTextField();
+        nomSalonDeDiscussion.setText("Salon de discussion");
+        nomSalonDeDiscussion.setBounds(371, 43, 285, 25);
+        nomSalonDeDiscussion.setEditable(false);
+        frame.getContentPane().add(nomSalonDeDiscussion);
+        nomSalonDeDiscussion.setColumns(10);
 
         JList listContactGroup = new JList();
         listContactGroup.setBounds(12, 586, 187, -205);
@@ -97,4 +115,37 @@ public class GuiRoom {
 
     }
 
+
+    public void actionPerformed(ActionEvent e){
+
+        switch(e.getActionCommand()){
+
+            case "SendAMessage":
+                //Récupération du message saisis par l'utilisateur
+                String message = messageToSendArea.getText();
+                //Pour éviter l'envoie de lignes vides
+                String newline = System.getProperty("line.separator");
+                boolean hasNewline = message.contains(newline);
+                if((message.trim().length() > 0) && !hasNewline) {
+                    //Réupération de l'heure de l'envoi
+                    String timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+                    //Affichage du message dans le chatArea
+                    chatArea.append("Pseudo" + "  " + timeStamp + "\n" + message +"\n\n");
+                    try {
+                        chatArea.setCaretPosition(chatArea.getLineEndOffset(chatArea.getLineCount() - 1));
+                    } catch (BadLocationException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    //Suppression du contenu de la zone de texte "messageToSendArea"
+                    messageToSendArea.setText("");
+                    break;
+                }
+                else{
+                    //Si le message est vide et remplit d'espace, il vaut mieux
+                    //que le curseur revienne au début de la zone de texte
+                    messageToSendArea.setText("");
+                }
+        }
+    }
 }
