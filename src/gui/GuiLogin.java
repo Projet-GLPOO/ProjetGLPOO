@@ -1,11 +1,13 @@
 package gui;
 
-import server.Test;
+import server.ServerConnection;
+import user.User;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 public class GuiLogin {
     private JFrame frame;
@@ -14,12 +16,12 @@ public class GuiLogin {
     private JPasswordField passwordField;
     private static GuiLogin window ;
 
+    ServerConnection serverConnection;
+
 
 
     public static void main(String[] args) {
         launch();
-        /*Test test = new Test();
-        test.zlatan();*/
     }
 
     public static void launch() {
@@ -33,13 +35,18 @@ public class GuiLogin {
                 }
             }
         });
-
     }
 
 
     public GuiLogin() {
 
         initialize();
+        serverConnection = new ServerConnection();
+        try {
+            serverConnection.launchBddConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void initialize() {
@@ -62,8 +69,10 @@ public class GuiLogin {
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
-                Test test = new Test();
-                if(test.zlatan(userNameField.getText(), String.valueOf(passwordField.getPassword()))) {
+                if(serverConnection.loginConnection(userNameField.getText(), String.valueOf(passwordField.getPassword()))) {
+                    User user = new User(userNameField.getText(), String.valueOf(passwordField.getPassword()));
+                    user.setId(serverConnection.giveId(user.getPseudo()));
+                    System.out.println(user.getId());
                     GuiRoom guiRoom = new GuiRoom();
                     guiRoom.launch();
                 }
@@ -97,7 +106,7 @@ public class GuiLogin {
         JLabel lblPassword = new JLabel("Password");
         lblPassword.setBounds(642, 290, 85, 24);
         frame.getContentPane().add(lblPassword);
-//
+
         txtProjetGlpoo = new JTextField();
         txtProjetGlpoo.setBackground(new Color(240, 248, 255));
         txtProjetGlpoo.setFont(new Font("Calibri Light", Font.BOLD, 34));
@@ -114,7 +123,5 @@ public class GuiLogin {
         frame.setBackground(new Color(240, 248, 255));
         frame.setBounds(100, 100, 1073, 737);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-
     }
 }

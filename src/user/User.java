@@ -1,22 +1,17 @@
 package user;
 
 import java.util.List;
-import java.util.UUID;
 
 public class User {
     private String pseudo;
     private String mdp;
-    private UUID id;
-    private List<Group> groups;
+    private int id;
 
 
 
-
-    public User(String pseudo, String mdp, UUID id, List<Group> groups ) {
+    public User(String pseudo, String mdp) {
         this.pseudo = pseudo;
         this.mdp = mdp;
-        this.id = id;
-        this.groups= groups;
     }
 
     public void addGroup(List<Group>  groups, Group newGroup) {
@@ -43,24 +38,11 @@ public class User {
         this.mdp = mdp;
     }
 
-    public UUID getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(int id) {
         this.id = id;
     }
-
-    public List<Group> getGroups() {
-        return groups;
-    }
-
-    public void setGroups(List<Group> groups) {
-        this.groups = groups;
-    }
-
-
-
-
-
 }

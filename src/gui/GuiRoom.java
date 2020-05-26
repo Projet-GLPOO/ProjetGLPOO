@@ -33,9 +33,9 @@ public class GuiRoom implements ActionListener{
     public void temp() {
         listTest = new ArrayList<User>();
         listTest = room.getContact();
-        User userTest1 =  new User("rapido", "razmo", UUID.randomUUID(), null);
-        User userTest2 =  new User("razmo", "rapido", UUID.randomUUID(), null);
-        room.addContact(listTest,userTest1);
+        //User userTest1 =  new User("rapido", "razmo", UUID.randomUUID(), null);
+        //User userTest2 =  new User("razmo", "rapido", UUID.randomUUID(), null);
+        //room.addContact(listTest,userTest1);
         //frefriefjeifjqezlfjqklfjdqklfqjfkldjfsd//
     }
 
