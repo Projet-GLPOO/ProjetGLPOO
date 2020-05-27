@@ -27,36 +27,10 @@ public class GuiRoom implements ActionListener{
 
 
 
-    /**************************************************************************/
-    private List<User> listTest;
-
-    public void temp() {
-        listTest = new ArrayList<User>();
-        listTest = room.getContact();
-        //User userTest1 =  new User("rapido", "razmo", UUID.randomUUID(), null);
-        //User userTest2 =  new User("razmo", "rapido", UUID.randomUUID(), null);
-        //room.addContact(listTest,userTest1);
-        //frefriefjeifjqezlfjqklfjdqklfqjfkldjfsd//
-    }
 
 
 
 
-    /******************************************************************************/
-
-
-    public void launch() {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    GuiRoom window = new GuiRoom();
-                    window.frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     /**
      * Create the application.
@@ -73,6 +47,8 @@ public class GuiRoom implements ActionListener{
         frame.setBounds(100, 100, 1012, 751);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().setLayout(null);
+        frame.setVisible(true);
+
 
         JList listContactUser = new JList();
         listContactUser.setBounds(12, 337, 187, -305);

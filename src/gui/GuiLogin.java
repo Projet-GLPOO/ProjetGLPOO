@@ -21,32 +21,25 @@ public class GuiLogin {
 
 
     public static void main(String[] args) {
-        launch();
-    }
-
-    public static void launch() {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    window = new GuiLogin();
-                    window.frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        EventQueue.invokeLater(() -> {
+            try {
+                window = new GuiLogin();
+                window.frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }
 
-
     public GuiLogin() {
-
-        initialize();
         serverConnection = new ServerConnection();
         try {
             serverConnection.launchBddConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        initialize();
+
     }
 
     public void initialize() {
@@ -74,7 +67,7 @@ public class GuiLogin {
                     user.setId(serverConnection.giveId(user.getPseudo()));
                     System.out.println(user.getId());
                     GuiRoom guiRoom = new GuiRoom();
-                    guiRoom.launch();
+
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "Username or password error!");
