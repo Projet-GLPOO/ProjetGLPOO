@@ -1,5 +1,6 @@
 package gui;
 
+import server.ServerConnection;
 import user.Room;
 import user.User;
 
@@ -24,6 +25,8 @@ public class GuiRoom implements ActionListener{
     private JTextArea messageToSendArea;
     private JButton sendMessageButton;
     private Room room;
+    private User user;
+    private ServerConnection serverConnection;
 
 
 
@@ -35,7 +38,10 @@ public class GuiRoom implements ActionListener{
     /**
      * Create the application.
      */
-    public GuiRoom() {
+    public GuiRoom(String userName, String mdp, int id) {
+        user = new User(userName, mdp);
+        user.setId(id);
+        serverConnection = new ServerConnection();
         initialize();
     }
 
@@ -68,8 +74,11 @@ public class GuiRoom implements ActionListener{
         sendMessageButton.setEnabled(true);
         frame.getContentPane().add(sendMessageButton);
 
-        JList listMemberGroup = new JList();
-        listMemberGroup.setBounds(825, 586, 125, -549);
+
+        DefaultListModel model = new DefaultListModel();
+        model.addElement(user.getPseudo());
+        JList listMemberGroup = new JList(model);
+        listMemberGroup.setBounds(100, 15, 125, 500);
         frame.getContentPane().add(listMemberGroup);
 
         chatArea = new JTextArea();
@@ -109,7 +118,7 @@ public class GuiRoom implements ActionListener{
                     //Affichage du message dans le chatArea
                     int taille;
                     if(message.length() <= 25) {
-                        chatArea.append("Pseudo" + "  " + timeStamp + "\n" + message + "\n\n");
+                        chatArea.append(user.getPseudo() + "  " + timeStamp + "\n" + message + "\n\n");
                     }
                     if(message.length() > 25) {
                         taille = 93;

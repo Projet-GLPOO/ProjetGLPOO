@@ -1,5 +1,11 @@
 package server;
+import user.Group;
+import user.User;
+
+import java.awt.print.PrinterAbortException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ServerConnection {
@@ -79,6 +85,40 @@ public class ServerConnection {
             e.printStackTrace();
         }
         return id;
+    }
+
+
+
+    public List<Group> giveGroups(List<Group> listGroup) throws SQLException {
+        int groupeid;
+        String nomGroupe;
+        String dateCreation;
+        Group group;
+        List<User> roomMembers = new ArrayList<User>();
+
+        PreparedStatement stmt = conn.prepareStatement("Select * from Groupes");
+        PreparedStatement stmt2 = conn.prepareStatement("Select * from ParticipantsGroupe");
+
+        try{
+            ResultSet r = stmt.executeQuery();
+            ResultSet r2 = stmt2.executeQuery();
+
+            while(r.next() && r2.next()){
+
+                groupeid = r.getInt("GroupeID");
+                nomGroupe = r.getString("NomGroupe");
+                dateCreation = r.getString("DateCreation");
+
+
+            }
+                conn.commit();
+            }
+            catch(Exception e){
+                conn.rollback();
+            }
+            stmt.close();
+
+        return listGroup;
     }
 }
 

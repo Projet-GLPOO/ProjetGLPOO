@@ -6,10 +6,12 @@ import java.util.UUID;
 public class Group {
 
     private List<User> memberGroup;
-    private UUID idGroup;
+    private int idGroup;
+    private String nomGroupe;
+    private String dateCreation;
 
 
-    public Group(List<User> memberGroup , UUID idGroup ) {
+    public Group(List<User> memberGroup , int idGroup ) {
         this.memberGroup = memberGroup;
         this.idGroup = idGroup;
     }
@@ -22,11 +24,11 @@ public class Group {
         this.memberGroup = memberGroup;
     }
 
-    public UUID getIdGroup() {
+    public int getIdGroup() {
         return idGroup;
     }
 
-    public void setIdGroup(UUID idGroup) {
+    public void setIdGroup(int idGroup) {
         this.idGroup = idGroup;
     }
 

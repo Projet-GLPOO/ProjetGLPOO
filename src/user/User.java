@@ -14,6 +14,10 @@ public class User {
         this.mdp = mdp;
     }
 
+    public User(){
+
+    }
+
     public void addGroup(List<Group>  groups, Group newGroup) {
         groups.add(newGroup);
     }
