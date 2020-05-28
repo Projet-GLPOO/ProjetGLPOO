@@ -126,7 +126,7 @@ public class ServerConnection {
 
     //Récupère tous les ID utilisateurs d'un groupe (david+rayan)
 
-    public List<Integer> giveGroupUses(int groupId) throws SQLException{
+    public List<Integer> giveGroupUsers(int groupId) throws SQLException{
         int participantID;
         List<Integer> groupMembers = new ArrayList<Integer>();
 

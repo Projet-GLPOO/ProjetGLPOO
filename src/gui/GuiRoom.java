@@ -8,8 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.JScrollPane;
 import javax.swing.text.BadLocationException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,6 +27,8 @@ public class GuiRoom implements ActionListener{
     private Room room;
     private User user;
     private ServerConnection serverConnection;
+    private int index;
+
 
 
 
@@ -38,17 +40,18 @@ public class GuiRoom implements ActionListener{
     /**
      * Create the application.
      */
-    public GuiRoom(String userName, String mdp, int id) {
+    public GuiRoom(String userName, String mdp, int id,ServerConnection serverConnection) throws SQLException {
         user = new User(userName, mdp);
+        this.serverConnection = serverConnection;
+        room = new Room(id, serverConnection );
         user.setId(id);
-        serverConnection = new ServerConnection();
         initialize();
     }
 
     /**
      * Initialize the contents of the frame.
      */
-    private void initialize() {
+    private void initialize() throws SQLException {
         frame = new JFrame();
         frame.setBounds(100, 100, 1012, 751);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -77,7 +80,17 @@ public class GuiRoom implements ActionListener{
 
         DefaultListModel model = new DefaultListModel();
         model.addElement(user.getPseudo());
+        room.getDefaultListModel(model);
         JList listMemberGroup = new JList(model);
+        MouseListener mouseListener = new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                index = listMemberGroup.locationToIndex(e.getPoint());
+                System.out.println("clicked on Item " + index);
+                System.out.println(listMemberGroup.getSelectedValue().toString());
+            }
+        };
+        listMemberGroup.addMouseListener(mouseListener);
+
         listMemberGroup.setBounds(100, 15, 125, 500);
         frame.getContentPane().add(listMemberGroup);
 
@@ -96,7 +109,7 @@ public class GuiRoom implements ActionListener{
         nomSalonDeDiscussion.setColumns(10);
 
         JList listContactGroup = new JList();
-        listContactGroup.setBounds(12, 586, 187, -205);
+        listContactGroup.setBounds(800, 15, 125, 500);
         frame.getContentPane().add(listContactGroup);
 
     }

@@ -64,7 +64,11 @@ public class GuiLogin {
             public void mouseClicked(MouseEvent arg0) {
                 if(serverConnection.loginConnection(userNameField.getText(), String.valueOf(passwordField.getPassword())) && arg0.getSource()==buttonLogin) {
                     User user = new User(userNameField.getText(), String.valueOf(passwordField.getPassword()));
-                    GuiRoom guiRoom = new GuiRoom(userNameField.getText(), String.valueOf(passwordField.getPassword()), serverConnection.giveId(user.getPseudo()));
+                    try {
+                        GuiRoom guiRoom = new GuiRoom(userNameField.getText(), String.valueOf(passwordField.getPassword()), serverConnection.giveId(user.getPseudo()), serverConnection);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "Username or password error!");

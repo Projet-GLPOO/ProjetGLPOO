@@ -16,6 +16,8 @@ public class Group {
         this.idGroup = idGroup;
     }*/
 
+
+
     public Group(String nomGroupe , int idGroup ) {
         this.nomGroupe = nomGroupe;
         this.idGroup = idGroup;
@@ -35,6 +37,10 @@ public class Group {
 
     public void setIdGroup(int idGroup) {
         this.idGroup = idGroup;
+    }
+
+    public String getNomGroupe() {
+        return nomGroupe;
     }
 
 }
