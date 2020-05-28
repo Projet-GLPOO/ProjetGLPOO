@@ -23,10 +23,8 @@ public class GuiRoom implements ActionListener{
     private Room room;
     private User user;
     private ServerConnection serverConnection;
-    private int index;
-    private String tempIdGrp;
-    private List<Integer> groupUserId; // les id de tout les membres grp
-    private List<String> groupUserPseudo;
+
+
 
 
 
@@ -87,24 +85,7 @@ public class GuiRoom implements ActionListener{
         JList listMemberGroup = new JList(model);
         MouseListener mouseListener = new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                modelParticipantGroup.clear();
-                index = listMemberGroup.locationToIndex(e.getPoint());
-                System.out.println("clicked on Item " + index);
-                System.out.println(listMemberGroup.getSelectedValue().toString());
-                tempIdGrp = listMemberGroup.getSelectedValue().toString();
-                tempIdGrp =  tempIdGrp.substring(tempIdGrp.indexOf("#")+1,tempIdGrp.length());
-                try {
-                    groupUserId = serverConnection.giveGroupUsers(Integer.parseInt(tempIdGrp));
-                    groupUserPseudo = serverConnection.userIdToPseudo(groupUserId);
-
-                    for(int i = 0 ; i < groupUserPseudo.size(); i++){
-                        modelParticipantGroup.addElement(groupUserPseudo.get(i));
-                    }
-
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-
+                room.showMembersGroup(listMemberGroup,modelParticipantGroup );
             }
         };
         listMemberGroup.addMouseListener(mouseListener);
