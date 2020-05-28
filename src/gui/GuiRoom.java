@@ -5,8 +5,6 @@ import user.Room;
 import user.User;
 
 import javax.swing.*;
-import java.awt.*;
-import javax.swing.JScrollPane;
 import javax.swing.text.BadLocationException;
 import java.awt.event.*;
 import java.sql.SQLException;
@@ -14,8 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.UUID;
-import java.sql.Date;
 
 public class GuiRoom implements ActionListener{
 
@@ -28,6 +24,9 @@ public class GuiRoom implements ActionListener{
     private User user;
     private ServerConnection serverConnection;
     private int index;
+    private String tempIdGrp;
+    private List<Integer> groupUserId; // les id de tout les membres grp
+    private List<String> groupUserPseudo;
 
 
 
@@ -45,7 +44,10 @@ public class GuiRoom implements ActionListener{
         this.serverConnection = serverConnection;
         room = new Room(id, serverConnection );
         user.setId(id);
+        List<Integer> groupUserId = new ArrayList<Integer>();
+        List<String> groupUserPseudo = new ArrayList<String>();
         initialize();
+
     }
 
     /**
@@ -79,14 +81,30 @@ public class GuiRoom implements ActionListener{
 
 
         DefaultListModel model = new DefaultListModel();
+        DefaultListModel modelParticipantGroup = new DefaultListModel();
         model.addElement(user.getPseudo());
         room.getDefaultListModel(model);
         JList listMemberGroup = new JList(model);
         MouseListener mouseListener = new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                modelParticipantGroup.clear();
                 index = listMemberGroup.locationToIndex(e.getPoint());
                 System.out.println("clicked on Item " + index);
                 System.out.println(listMemberGroup.getSelectedValue().toString());
+                tempIdGrp = listMemberGroup.getSelectedValue().toString();
+                tempIdGrp =  tempIdGrp.substring(tempIdGrp.indexOf("#")+1,tempIdGrp.length());
+                try {
+                    groupUserId = serverConnection.giveGroupUsers(Integer.parseInt(tempIdGrp));
+                    groupUserPseudo = serverConnection.userIdToPseudo(groupUserId);
+
+                    for(int i = 0 ; i < groupUserPseudo.size(); i++){
+                        modelParticipantGroup.addElement(groupUserPseudo.get(i));
+                    }
+
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+
             }
         };
         listMemberGroup.addMouseListener(mouseListener);
@@ -108,7 +126,7 @@ public class GuiRoom implements ActionListener{
         frame.getContentPane().add(nomSalonDeDiscussion);
         nomSalonDeDiscussion.setColumns(10);
 
-        JList listContactGroup = new JList();
+        JList listContactGroup = new JList(modelParticipantGroup);
         listContactGroup.setBounds(800, 15, 125, 500);
         frame.getContentPane().add(listContactGroup);
 

@@ -48,9 +48,8 @@ public class Room {
         server.giveGroups(userGroup);
         for(int i = 0; i <userGroup.size();i++ ){
             memberIdGroup = server.giveGroupUsers(userGroup.get(i).getIdGroup());
-            if( server.verifUserGroup(idUser , memberIdGroup) == true){
-                model.addElement(userGroup.get(i).getNomGroupe());
-                System.out.println(userGroup.get(i).getNomGroupe());
+            if(server.verifUserGroup(idUser, memberIdGroup)){
+                model.addElement(userGroup.get(i).getNomGroupe()+"#"+userGroup.get(i).getIdGroup());
             }
         }
     }

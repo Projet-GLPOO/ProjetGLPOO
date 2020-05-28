@@ -169,16 +169,25 @@ public class ServerConnection {
     //TODO une fonction qui prend en entré groupmembers(list INT) et qui renvoie les pseudo associés (pour affichage plus tard) (list String)
 
     public List<String> userIdToPseudo(List<Integer> groupMembers) throws SQLException {
-        List<String> listPseudo = null;
+        List<String> listPseudo = new ArrayList<String>();
         String userPseudo;
-        ListIterator<Integer> it = groupMembers.listIterator();
 
-        while (it.hasNext()){
-            PreparedStatement stmt = conn.prepareStatement("Select * from Utilisateurs where UtilisateurId = UserID");
+
+        for(int i = 0;i <groupMembers.size() ;i++){
+
+            PreparedStatement stmt = conn.prepareStatement("Select * from Utilisateurs where UtilisateurId = ?");
             try{
+
+                stmt.setInt(1, groupMembers.get(i));
+
                 ResultSet r = stmt.executeQuery();
-                userPseudo = r.getString("Pseudonyme");
-                listPseudo.add(userPseudo);
+                while(r.next()) {
+                    userPseudo = r.getString("Pseudonyme");
+                    System.out.println(userPseudo);
+                    listPseudo.add(userPseudo);
+                }
+
+
                 conn.commit();
             }
             catch(Exception e){
