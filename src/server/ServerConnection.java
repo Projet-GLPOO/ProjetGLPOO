@@ -6,6 +6,7 @@ import java.awt.print.PrinterAbortException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 
 public class ServerConnection {
@@ -135,7 +136,7 @@ public class ServerConnection {
             ResultSet r = stmt.executeQuery();
 
 
-            while(r.next() /*&& r2.next()*/){
+            while(r.next()){
 
                 participantID = r.getInt("UtilisateurId");
                 groupMembers.add(participantID);
@@ -151,10 +152,41 @@ public class ServerConnection {
 
     }
 
-    /*TODO une fonction booleen qui prend en entré le user ID et la liste ID utilisateur précédente
-    pour vérifier si l'utilisateur appartient au groupe (renvoie true si oui)*/
+    /*TODO une fonction booleen qui prend en entré le user ID et la liste ID utilisateur précédente pour vérifier si l'utilisateur appartient au groupe (renvoie true si oui)*/
+
+    public boolean verifUserGroup(int userId, List<Integer> groupMembers){
+        ListIterator<Integer> it = groupMembers.listIterator();
+        while (it.hasNext()){
+            int currentUserId = it.next();
+            if(currentUserId == userId){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     //TODO une fonction qui prend en entré groupmembers(list INT) et qui renvoie les pseudo associés (pour affichage plus tard) (list String)
 
+    public List<String> userIdToPseudo(List<Integer> groupMembers) throws SQLException {
+        List<String> listPseudo = null;
+        String userPseudo;
+        ListIterator<Integer> it = groupMembers.listIterator();
+
+        while (it.hasNext()){
+            PreparedStatement stmt = conn.prepareStatement("Select * from Utilisateurs where UtilisateurId = UserID");
+            try{
+                ResultSet r = stmt.executeQuery();
+                userPseudo = r.getString("Pseudonyme");
+                listPseudo.add(userPseudo);
+                conn.commit();
+            }
+            catch(Exception e){
+                conn.rollback();
+            }
+            stmt.close();
+        }
+        return listPseudo;
+    }
 }
 
