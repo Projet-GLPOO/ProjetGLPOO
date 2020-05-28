@@ -11,8 +11,13 @@ public class Group {
     private String dateCreation;
 
 
-    public Group(List<User> memberGroup , int idGroup ) {
+    /*public Group(List<User> memberGroup , int idGroup ) {
         this.memberGroup = memberGroup;
+        this.idGroup = idGroup;
+    }*/
+
+    public Group(String nomGroupe , int idGroup ) {
+        this.nomGroupe = nomGroupe;
         this.idGroup = idGroup;
     }
 
@@ -31,6 +36,5 @@ public class Group {
     public void setIdGroup(int idGroup) {
         this.idGroup = idGroup;
     }
-
 
 }

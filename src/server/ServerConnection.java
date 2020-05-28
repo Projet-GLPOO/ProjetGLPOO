@@ -87,28 +87,30 @@ public class ServerConnection {
         return id;
     }
 
-
+    //récupère tous les groupes existant (david+rayan)
 
     public List<Group> giveGroups(List<Group> listGroup) throws SQLException {
         int groupeid;
         String nomGroupe;
-        String dateCreation;
+        //String dateCreation;
         Group group;
-        List<User> roomMembers = new ArrayList<User>();
+        //List<User> roomMembers = new ArrayList<User>();
 
         PreparedStatement stmt = conn.prepareStatement("Select * from Groupes");
-        PreparedStatement stmt2 = conn.prepareStatement("Select * from ParticipantsGroupe");
+        //PreparedStatement stmt2 = conn.prepareStatement("Select * from ParticipantsGroupe");
 
         try{
             ResultSet r = stmt.executeQuery();
-            ResultSet r2 = stmt2.executeQuery();
+            //ResultSet r2 = stmt2.executeQuery();
 
-            while(r.next() && r2.next()){
+            while(r.next() /*&& r2.next()*/){
 
                 groupeid = r.getInt("GroupeID");
                 nomGroupe = r.getString("NomGroupe");
-                dateCreation = r.getString("DateCreation");
+                //dateCreation = r.getString("DateCreation");
 
+                group = new Group(nomGroupe, groupeid);
+                listGroup.add(group);
 
             }
                 conn.commit();
@@ -116,9 +118,43 @@ public class ServerConnection {
             catch(Exception e){
                 conn.rollback();
             }
-            stmt.close();
+        stmt.close();
 
         return listGroup;
     }
+
+    //Récupère tous les ID utilisateurs d'un groupe (david+rayan)
+
+    public List<Integer> giveGroupUses(int groupId) throws SQLException{
+        int participantID;
+        List<Integer> groupMembers = new ArrayList<Integer>();
+
+        PreparedStatement stmt = conn.prepareStatement("Select * from ParticipantsGroupe where GroupeId = groupeId");
+
+        try{
+            ResultSet r = stmt.executeQuery();
+
+
+            while(r.next() /*&& r2.next()*/){
+
+                participantID = r.getInt("UtilisateurId");
+                groupMembers.add(participantID);
+            }
+            conn.commit();
+        }
+        catch(Exception e){
+            conn.rollback();
+        }
+        stmt.close();
+
+        return groupMembers;
+
+    }
+
+    /*TODO une fonction booleen qui prend en entré le user ID et la liste ID utilisateur précédente
+    pour vérifier si l'utilisateur appartient au groupe (renvoie true si oui)*/
+
+    //TODO une fonction qui prend en entré groupmembers(list INT) et qui renvoie les pseudo associés (pour affichage plus tard) (list String)
+
 }
 
