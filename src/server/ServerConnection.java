@@ -197,5 +197,27 @@ public class ServerConnection {
         }
         return listPseudo;
     }
+
+    public List<String> allPseudoFromBase() throws SQLException{
+        List<String> listPseudo = new ArrayList<String>();
+        String userPseudo;
+
+        PreparedStatement stmt = conn.prepareStatement("Select * from Utilisateurs");
+        try{
+            ResultSet r = stmt.executeQuery();
+            while(r.next()){
+                userPseudo = r.getString("Pseudonyme");
+                listPseudo.add(userPseudo);
+            }
+            conn.commit();
+        }
+        catch(Exception e){
+            conn.rollback();
+        }
+        stmt.close();
+
+        return listPseudo;
+    }
+
 }
 
