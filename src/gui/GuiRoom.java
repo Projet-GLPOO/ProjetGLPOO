@@ -91,6 +91,7 @@ public class GuiRoom implements ActionListener{
 
         room.getDefaultListModel(model);
         JList listMemberGroup = new JList(model);
+
         MouseListener mouseListener = new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 room.showMembersGroup(listMemberGroup,modelParticipantGroup );

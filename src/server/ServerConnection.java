@@ -130,9 +130,10 @@ public class ServerConnection {
         int participantID;
         List<Integer> groupMembers = new ArrayList<Integer>();
 
-        PreparedStatement stmt = conn.prepareStatement("Select * from ParticipantsGroupe where GroupeId = groupeId");
+        PreparedStatement stmt = conn.prepareStatement("Select * from ParticipantsGroupe where GroupeId = ?");
 
         try{
+            stmt.setInt(1, groupId);
             ResultSet r = stmt.executeQuery();
 
 
