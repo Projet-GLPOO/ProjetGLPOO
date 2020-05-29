@@ -219,5 +219,26 @@ public class ServerConnection {
         return listPseudo;
     }
 
+    public List<Integer> allIdUserFromBase() throws SQLException{
+        List<Integer> listIdUser = new ArrayList<Integer>();
+        int userId;
+
+        PreparedStatement stmt = conn.prepareStatement("Select * from Utilisateurs");
+        try{
+            ResultSet r = stmt.executeQuery();
+            while(r.next()){
+                userId = r.getInt("UtilisateurID");
+                listIdUser.add(userId);
+            }
+            conn.commit();
+        }
+        catch(Exception e){
+            conn.rollback();
+        }
+        stmt.close();
+
+        return listIdUser;
+    }
+
 }
 

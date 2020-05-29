@@ -19,10 +19,13 @@ public class GuiRoom implements ActionListener{
     private JTextField nomSalonDeDiscussion;
     private JTextArea chatArea;
     private JTextArea messageToSendArea;
+
     private JButton sendMessageButton;
+    private JButton createGroup;
     private Room room;
     private User user;
     private ServerConnection serverConnection;
+
 
 
 
@@ -59,9 +62,6 @@ public class GuiRoom implements ActionListener{
         frame.setVisible(true);
 
 
-        JList listContactUser = new JList();
-        listContactUser.setBounds(12, 337, 187, -305);
-        frame.getContentPane().add(listContactUser);
 
 
         messageToSendArea = new JTextArea();
@@ -71,16 +71,24 @@ public class GuiRoom implements ActionListener{
         frame.getContentPane().add(scrollMessageToSend);
 
         sendMessageButton = new JButton("Envoyer");
-        sendMessageButton.setBounds(824, 626, 97, 25);
+        sendMessageButton.setBounds(824, 620, 110, 25);
         sendMessageButton.setActionCommand("SendAMessage");
         sendMessageButton.addActionListener(this);
         sendMessageButton.setEnabled(true);
         frame.getContentPane().add(sendMessageButton);
 
+        createGroup = new JButton("New Group");
+        createGroup.setBounds(824, 660, 110, 25);
+        createGroup.setActionCommand("CreateGroup");
+        createGroup.addActionListener(this);
+        createGroup.setEnabled(true);
+        frame.getContentPane().add(createGroup);
+
 
         DefaultListModel model = new DefaultListModel();
         DefaultListModel modelParticipantGroup = new DefaultListModel();
-        model.addElement(user.getPseudo());
+
+
         room.getDefaultListModel(model);
         JList listMemberGroup = new JList(model);
         MouseListener mouseListener = new MouseAdapter() {
@@ -90,7 +98,7 @@ public class GuiRoom implements ActionListener{
         };
         listMemberGroup.addMouseListener(mouseListener);
 
-        listMemberGroup.setBounds(100, 15, 125, 500);
+        listMemberGroup.setBounds(140, 15, 80, 500);
         frame.getContentPane().add(listMemberGroup);
 
         chatArea = new JTextArea();
@@ -100,12 +108,17 @@ public class GuiRoom implements ActionListener{
         scrollChat.setBounds(240, 136, 538, 418);
         frame.getContentPane().add(scrollChat);
 
+
+
+
+
         nomSalonDeDiscussion = new JTextField();
         nomSalonDeDiscussion.setText("Salon de discussion");
         nomSalonDeDiscussion.setBounds(371, 43, 285, 25);
         nomSalonDeDiscussion.setEditable(false);
-        frame.getContentPane().add(nomSalonDeDiscussion);
         nomSalonDeDiscussion.setColumns(10);
+        frame.getContentPane().add(nomSalonDeDiscussion);
+
 
         JList listContactGroup = new JList(modelParticipantGroup);
         listContactGroup.setBounds(800, 15, 125, 500);
@@ -130,7 +143,7 @@ public class GuiRoom implements ActionListener{
                     //Affichage du message dans le chatArea
                     int taille;
                     if(message.length() <= 25) {
-                        chatArea.append(user.getPseudo() + "  " + timeStamp + "\n" + message + "\n\n");
+                        chatArea.append(user.getPseudo()+"#"+user.getId() + "  " + timeStamp + "\n" + message + "\n\n");
                     }
                     if(message.length() > 25) {
                         taille = 93;
@@ -158,6 +171,108 @@ public class GuiRoom implements ActionListener{
                     //que le curseur revienne au début de la zone de texte
                     messageToSendArea.setText("");
                 }
+
+            case "CreateGroup":
+                try {
+                    createFrame();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                break;
+
+
+
+
+
+
         }
     }
+
+
+    public void createFrame() throws SQLException {
+        JFrame frameGroup = new JFrame();
+        frameGroup.setBounds(200, 200, 500, 500);
+        frameGroup.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frameGroup.getContentPane().setLayout(null);
+        frameGroup.setVisible(true);
+
+        JTextArea chatAreaCreateGroup = new JTextArea();
+        chatAreaCreateGroup.setBounds(1, 175, 500, 100);
+        frameGroup.getContentPane().add(chatAreaCreateGroup);
+
+
+
+        DefaultListModel modelusersMembersRoom = new DefaultListModel();
+        room.addListUserRoom(modelusersMembersRoom);
+        JList usersMemberRoom = new JList(modelusersMembersRoom);
+        usersMemberRoom.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        usersMemberRoom.setBounds(0, 0, 175, 150);
+        frameGroup.getContentPane().add(usersMemberRoom);
+
+        DefaultListModel modelcopyList = new DefaultListModel();
+
+        JButton Copygroup = new JButton();
+        Copygroup = new JButton("Copy");
+        Copygroup.setBounds(175, 0, 135, 50);
+        Copygroup.setEnabled(true);
+        frameGroup.getContentPane().add(Copygroup);
+
+        Copygroup.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modelcopyList.clear();
+                for(int i = 0; i < usersMemberRoom.getSelectedValuesList().size(); i++ ){
+                    modelcopyList.addElement(usersMemberRoom.getSelectedValuesList().get(i));
+
+                }
+            }
+        });
+
+
+
+
+        JList copyList = new JList(modelcopyList);
+        copyList.setBounds(310, 0, 175, 150);
+        frameGroup.getContentPane().add(copyList);
+
+
+        JButton sendMessageCreateGroupButton = new JButton();
+        sendMessageCreateGroupButton = new JButton("Envoyer");
+        sendMessageCreateGroupButton.setBounds(1, 300, 100, 50);
+        sendMessageCreateGroupButton.setEnabled(true);
+        frameGroup.getContentPane().add(sendMessageCreateGroupButton);
+
+        List<String> groupMember = new ArrayList<String>();
+        sendMessageCreateGroupButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              String message = chatAreaCreateGroup.getText();
+
+              for(int i =0 ; i < copyList.getModel().getSize(); i++){
+                  groupMember.add(String.valueOf(copyList.getModel().getElementAt(i)));
+
+              }
+
+              room.createGroup(message,groupMember);
+            }
+        });
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
 }
+

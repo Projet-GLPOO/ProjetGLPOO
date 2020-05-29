@@ -15,6 +15,8 @@ public class Room {
     ServerConnection serverConnection;
     int idUser;
     List<Integer>  memberIdGroup;
+    List<String> memberPseudoRoom;
+    List<Integer> memberIdUser;
 
     public Room(int id,ServerConnection serverConnection ){
         contact = new ArrayList<User>();
@@ -23,6 +25,8 @@ public class Room {
         this.serverConnection = serverConnection;
         idUser = id;
         memberIdGroup = new ArrayList<Integer>();
+        memberPseudoRoom = new ArrayList<String>();
+        memberIdUser = new ArrayList<Integer>();
 
     }
 
@@ -66,12 +70,33 @@ public class Room {
             groupUserPseudo = serverConnection.userIdToPseudo(groupUserId); // Récupère les Pseudo des membres du groupe sélectionné
 
             for(int i = 0 ; i < groupUserPseudo.size(); i++){
-                modelParticipantGroup.addElement(groupUserPseudo.get(i)); // Ajoute les pseudo à modelParticipantGroup
+                modelParticipantGroup.addElement(groupUserPseudo.get(i)+"#"+ groupUserId.get(i)); // Ajoute les pseudo à modelParticipantGroup
             }
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    public void addListUserRoom(DefaultListModel usersMemberRoom) throws SQLException {
+        memberPseudoRoom = serverConnection.allPseudoFromBase();
+        memberIdUser = serverConnection.allIdUserFromBase();
+
+        for(int i = 0; i< memberPseudoRoom.size() ; i++){
+            usersMemberRoom.addElement(memberPseudoRoom.get(i) +"#"+ memberIdUser.get(i)+  "\n");
+        }
+    }
+
+    public void createGroup(String groupName , List<String> groupMember ){
+
+        System.out.println("Titre group : " + groupName);
+
+
+        for(int i =0 ; i <groupMember.size(); i++){
+            System.out.println(groupMember.get(i));
+        }
+
+
     }
 
 
