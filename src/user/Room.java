@@ -3,6 +3,8 @@ package user;
 import server.ServerConnection;
 
 import javax.swing.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,21 +85,54 @@ public class Room {
         memberIdUser = serverConnection.allIdUserFromBase();
 
         for(int i = 0; i< memberPseudoRoom.size() ; i++){
-            usersMemberRoom.addElement(memberPseudoRoom.get(i) +"#"+ memberIdUser.get(i)+  "\n");
+            usersMemberRoom.addElement(memberPseudoRoom.get(i) +"#"+ memberIdUser.get(i));
         }
     }
 
-    public void createGroup(String groupName , List<String> groupMember ){
+    public void createGroup(String groupName , List<String> groupMember ) throws SQLException {
+        Connection conn;
 
-        System.out.println("Titre group : " + groupName);
 
 
-        for(int i =0 ; i <groupMember.size(); i++){
-            System.out.println(groupMember.get(i));
-        }
+        List<Integer> idMemberNewGroup = new ArrayList<Integer>();
+        idMemberNewGroup = idFromPseudo(groupMember);
+
+        List<String> pseudoMemberNewGroup = new ArrayList<String>();
+        pseudoMemberNewGroup = stringFromPseudo(groupMember);
+
+       // serverConnection.insertIntoGroupes(idMemberNewGroup,pseudoMemberNewGroup);
+
+
 
 
     }
+
+    public List<Integer> idFromPseudo ( List<String> groupMember){
+        List<Integer> idMemberNewGroup = new ArrayList<Integer>();
+        String tempIdMemberGrp;
+        for(int i = 0; i < groupMember.size() ; i++){
+            tempIdMemberGrp = groupMember.get(i);
+            tempIdMemberGrp =  tempIdMemberGrp.substring(tempIdMemberGrp.indexOf("#")+1,tempIdMemberGrp.length());
+            idMemberNewGroup.add(Integer.parseInt(tempIdMemberGrp));
+        }
+        return idMemberNewGroup;
+    }
+
+    public List<String> stringFromPseudo( List<String> groupMember ){
+        List<String> pseudoMemberNewGroup = new ArrayList<String>();
+
+        String tempPseudoMemberGrp;
+
+        for(int i = 0; i < groupMember.size() ; i++){
+            tempPseudoMemberGrp = groupMember.get(i);
+            tempPseudoMemberGrp =  tempPseudoMemberGrp.substring(0,tempPseudoMemberGrp.indexOf("#")-1);
+            pseudoMemberNewGroup.add(tempPseudoMemberGrp);
+        }
+        return pseudoMemberNewGroup;
+    }
+
+
+
 
 
 

@@ -232,7 +232,7 @@ public class GuiRoom implements ActionListener{
 
 
 
-        JList copyList = new JList(modelcopyList);
+        JList<String> copyList = new JList<String>(modelcopyList);
         copyList.setBounds(310, 0, 175, 150);
         frameGroup.getContentPane().add(copyList);
 
@@ -250,11 +250,15 @@ public class GuiRoom implements ActionListener{
               String message = chatAreaCreateGroup.getText();
 
               for(int i =0 ; i < copyList.getModel().getSize(); i++){
-                  groupMember.add(String.valueOf(copyList.getModel().getElementAt(i)));
+                  groupMember.add(copyList.getModel().getElementAt(i));
 
               }
 
-              room.createGroup(message,groupMember);
+                try {
+                    room.createGroup(message,groupMember);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
 

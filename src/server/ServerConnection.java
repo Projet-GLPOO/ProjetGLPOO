@@ -241,5 +241,37 @@ public class ServerConnection {
         return listIdUser;
     }
 
+    public void insertIntoGroupes( List<Integer> idMemberNewGroup , List<String> pseudoMemberNewGroup) throws SQLException {
+      //TODO finir inserer dans groupes
+
+        /*  int idMember;
+        String pseudoMember;
+
+        for(int i = 0; i < idMemberNewGroup.size(); i++) {
+            PreparedStatement  stmt = conn.prepareStatement();
+            try{
+                idMember = idMemberNewGroup.get(i);
+                pseudoMember = pseudoMemberNewGroup.get(i);
+                int r = stmt.executeUpdate("Insert Into groupes values(?, ?, sysdate, NULL)");
+
+
+                stmt.setInt(1, idMember);
+                stmt.setInt(2, pseudoMember);
+
+                conn.commit();
+            }
+            catch(Exception e){
+                conn.rollback();
+            }
+        }
+
+        stmt.close();*/
+
+    }
+
+    public void insertIntoParticipantGroup( List<Integer> idMemberNewGroup , List<String> pseudoMemberNewGroup) throws SQLException{
+    //Todo
+    }
+
 }
 
