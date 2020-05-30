@@ -1,7 +1,9 @@
 package server;
 
+import user.Message;
 import user.User;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.*; 
 
@@ -46,5 +48,8 @@ public class SimpleClient {
 				ioe.printStackTrace();
 			}
 		}
+
 	}
+
+
 }

@@ -14,12 +14,14 @@ public class ServerThread extends Thread {
     private Socket socket;
 	private ObjectInputStream input;
 	private ObjectOutputStream output;
+	private JTextArea chatArea;
  
     public ServerThread(Socket socket) {
         this.socket = socket;
     }
- 
-    public void run() {
+
+
+	public void run() {
         try {
 			//create the streams that will handle the objects coming through the sockets
 			input = new ObjectInputStream(socket.getInputStream());
@@ -48,4 +50,7 @@ public class ServerThread extends Thread {
 			}
 		}
     }
+
+
+
 }

@@ -1,5 +1,7 @@
 package server;
 
+import javax.swing.*;
+
 public class ClientConnection
 {
 	public ClientConnection()
