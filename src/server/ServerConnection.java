@@ -281,6 +281,7 @@ public class ServerConnection {
         String date;
         Message message;
         try {
+            messageList.clear();
             PreparedStatement stmt = conn.prepareStatement("Select * from Messages WHERE Groupeid = ?");
             try {
                 stmt.setInt(1, groupId);

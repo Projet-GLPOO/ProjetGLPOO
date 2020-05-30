@@ -98,6 +98,7 @@ public class GuiRoom implements ActionListener{
 
         MouseListener mouseListener = new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                chatArea.setText("");
                 room.getMembersGroup(listMemberGroup,modelParticipantGroup);
                 room.getGroupMessages(room.getIdSelectedGroup(listMemberGroup), messagesList);
                 showGroupMessages(messagesList);
