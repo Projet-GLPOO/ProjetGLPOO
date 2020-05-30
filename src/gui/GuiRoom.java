@@ -1,6 +1,6 @@
 package gui;
 
-import server.ServerConnection;
+import bdd.BddConnection;
 import user.Message;
 import user.Room;
 import user.User;
@@ -8,6 +8,7 @@ import user.User;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import java.awt.event.*;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class GuiRoom implements ActionListener{
     private Room room;
     private User user;
     private List<Message> messagesList;
-    private ServerConnection serverConnection;
+    private BddConnection serverConnection;
     private JList listMemberGroup;
 
 
@@ -43,7 +44,7 @@ public class GuiRoom implements ActionListener{
     /**
      * Create the application.
      */
-    public GuiRoom(String userName, String mdp, int id,ServerConnection serverConnection) throws SQLException {
+    public GuiRoom(String userName, String mdp, int id, BddConnection serverConnection) throws SQLException {
         user = new User(userName, mdp);
         this.serverConnection = serverConnection;
         room = new Room(id, serverConnection );
@@ -141,15 +142,25 @@ public class GuiRoom implements ActionListener{
 
             case "SendAMessage":
                 //Récupération du message saisis par l'utilisateur
-                String message = messageToSendArea.getText();
+                String tempIdGrp;
                 String timeStamp = "null";
+                tempIdGrp = listMemberGroup.getSelectedValue().toString(); // Récupère le nom du groupe sélectionné
+                tempIdGrp =  tempIdGrp.substring(tempIdGrp.indexOf("#")+1,tempIdGrp.length()); //Dans le nom sélectionné récupère l'id du groupe
+                timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+                Message message = new Message(user.getId(),Integer.parseInt(tempIdGrp),messageToSendArea.getText(),timeStamp );
+                String textmessage = messageToSendArea.getText();
+                try {
+                    room.callServerTread(message,user,chatArea);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
 
                 //Pour éviter l'envoie de lignes vides
-                String newline = System.getProperty("line.separator");
+               /* String newline = System.getProperty("line.separator");
                 boolean hasNewline = message.contains(newline);
                 if((message.trim().length() > 0) && !hasNewline) {
                     //Réupération de l'heure de l'envoi
-                    timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+
                     //Affichage du message dans le chatArea
                     int taille;
                     if(message.length() <= 25) {
@@ -179,8 +190,8 @@ public class GuiRoom implements ActionListener{
                     //Si le message est vide et remplit d'espace, il vaut mieux
                     //que le curseur revienne au début de la zone de texte
                     messageToSendArea.setText("");
-                }
-                room.sendMessageToServerConnection(user.getId(), room.getIdSelectedGroup(listMemberGroup), message, timeStamp);
+                }*/
+                room.sendMessageToServerConnection(user.getId(), room.getIdSelectedGroup(listMemberGroup), textmessage, timeStamp);
                 break;
 
             case "CreateGroup":

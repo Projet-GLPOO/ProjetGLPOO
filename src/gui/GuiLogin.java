@@ -1,6 +1,6 @@
 package gui;
 
-import server.ServerConnection;
+import bdd.BddConnection;
 import user.User;
 
 import javax.swing.*;
@@ -15,7 +15,7 @@ public class GuiLogin {
     private JTextField txtProjetGlpoo;
     private JPasswordField passwordField;
     private static GuiLogin window ;
-    private ServerConnection serverConnection;
+    private BddConnection bddConnection;
 
 
 
@@ -31,9 +31,9 @@ public class GuiLogin {
     }
 
     public GuiLogin() {
-        serverConnection = new ServerConnection();
+        bddConnection = new BddConnection();
         try {
-            serverConnection.launchBddConnection();
+            bddConnection.launchBddConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -61,10 +61,10 @@ public class GuiLogin {
         buttonLogin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
-                if(serverConnection.loginConnection(userNameField.getText(), String.valueOf(passwordField.getPassword())) && arg0.getSource()==buttonLogin) {
+                if(bddConnection.loginConnection(userNameField.getText(), String.valueOf(passwordField.getPassword())) && arg0.getSource()==buttonLogin) {
                     User user = new User(userNameField.getText(), String.valueOf(passwordField.getPassword()));
                     try {
-                        GuiRoom guiRoom = new GuiRoom(userNameField.getText(), String.valueOf(passwordField.getPassword()), serverConnection.giveId(user.getPseudo()), serverConnection);
+                        GuiRoom guiRoom = new GuiRoom(userNameField.getText(), String.valueOf(passwordField.getPassword()), bddConnection.giveId(user.getPseudo()), bddConnection);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }

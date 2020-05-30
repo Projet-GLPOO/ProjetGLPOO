@@ -10,53 +10,33 @@ import java.util.Scanner;
 
 
 
-public class FirstServer {
+public class FirstServer extends AbstractServer{
 
 
-    public static void main(String[] args){
-        ServerSocket socketserver;
-        Socket socketduserveur;
-        final BufferedReader in;
-        final PrintWriter out;
-        final Scanner sc = new Scanner(System.in);
+    private String ip = "localhost";
+    private ServerSocket ss;
 
+    public void connect(String ip) {
         try {
-            socketserver = new ServerSocket(8082);
-            socketduserveur = socketserver.accept();
-            out = new PrintWriter(socketduserveur.getOutputStream());
-            in = new BufferedReader(new InputStreamReader(socketduserveur.getInputStream()));
-            Thread envoyer = new Thread(new Runnable() {
-                String message;
-                @Override
-                public void run() {
-                    while(true){
-                        message = sc.next();
-                        out.println(message);
-                        out.flush();
-                    }
+            //the server socket is defined only by a port (its IP is localhost)
+            ss = new ServerSocket (8082);
+            System.out.println("Server waiting for connection...");
+            while (true) {
+                Socket socket = ss.accept();//establishes connection
+                System.out.println("Connected as " + ip);
+                // create a new thread to handle client socket
+                new ServerThread(socket).start();
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            //if IOException close the server socket
+            if (ss != null && !ss.isClosed()) {
+                try {
+                    ss.close();
+                } catch (IOException e) {
+                    e.printStackTrace(System.err);
                 }
-            });
-            envoyer.start();
-
-            Thread recevoir = new Thread(new Runnable() {
-                String message;
-                @Override
-                public void run() {
-                    while(true){
-                        try {
-                            message = in.readLine();
-                        }
-                        catch (IOException e){
-                            e.printStackTrace();
-                        }
-                        System.out.println("Client: " + message);
-                    }
-                }
-            });
-            recevoir.start();
-        }
-        catch (IOException e){
-            e.printStackTrace();
+            }
         }
     }
 }

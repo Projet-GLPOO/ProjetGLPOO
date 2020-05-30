@@ -1,8 +1,12 @@
 package user;
 
-import server.ServerConnection;
+import bdd.BddConnection;
+import server.ClientConnection;
+import server.ServerThread;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.net.Socket;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,34 +17,38 @@ public class Room {
     List<User> contact;
     List<Group> userGroup;
     DefaultListModel model;
-    ServerConnection serverConnection;
+    BddConnection bddConnection;
     int idUser;
     List<Integer>  memberIdGroup;
     List<String> memberPseudoRoom;
     List<Integer> memberIdUser;
+    ServerThread serverThread;
+    ClientConnection clientConnection;
 
     private List<Message> messageList;
 
-    public Room(int id,ServerConnection serverConnection ){
+    public Room(int id, BddConnection bddConnection ){
         contact = new ArrayList<User>();
         userGroup = new ArrayList<Group>();
         model = new DefaultListModel();
-        this.serverConnection = serverConnection;
+        this.bddConnection = bddConnection;
         idUser = id;
         memberIdGroup = new ArrayList<Integer>();
         memberPseudoRoom = new ArrayList<String>();
         memberIdUser = new ArrayList<Integer>();
         messageList = new ArrayList<Message>();
+        clientConnection = new ClientConnection();
+
     }
 
 
 
     //Récupère les groupes de l'utilisateur onnecté et les ajoute à une defaultListModel qui sera affiché dans la room
     public void getDefaultListModel (DefaultListModel model) throws SQLException {
-        serverConnection.giveGroups(userGroup);
+        bddConnection.giveGroups(userGroup);
         for(int i = 0; i <userGroup.size();i++ ){
-            memberIdGroup = serverConnection.giveGroupUsers(userGroup.get(i).getIdGroup());
-            if(serverConnection.verifUserGroup(idUser, memberIdGroup)){
+            memberIdGroup = bddConnection.giveGroupUsers(userGroup.get(i).getIdGroup());
+            if(bddConnection.verifUserGroup(idUser, memberIdGroup)){
                 model.addElement(userGroup.get(i).getNomGroupe()+"#"+userGroup.get(i).getIdGroup());
             }
         }
@@ -56,8 +64,8 @@ public class Room {
         tempIdGrp = listMemberGroup.getSelectedValue().toString(); // Récupère le nom du groupe sélectionné
         tempIdGrp =  tempIdGrp.substring(tempIdGrp.indexOf("#")+1,tempIdGrp.length()); //Dans le nom sélectionné récupère l'id du groupe
         try {
-            groupUserId = serverConnection.giveGroupUsers(Integer.parseInt(tempIdGrp)); //Récupère tous les id des membres du groupe sélectionné
-            groupUserPseudo = serverConnection.userIdToPseudo(groupUserId); // Récupère les Pseudo des membres du groupe sélectionné
+            groupUserId = bddConnection.giveGroupUsers(Integer.parseInt(tempIdGrp)); //Récupère tous les id des membres du groupe sélectionné
+            groupUserPseudo = bddConnection.userIdToPseudo(groupUserId); // Récupère les Pseudo des membres du groupe sélectionné
 
             for(int i = 0 ; i < groupUserPseudo.size(); i++){
                 modelParticipantGroup.addElement(groupUserPseudo.get(i)+"#"+ groupUserId.get(i)); // Ajoute les pseudo à modelParticipantGroup
@@ -71,8 +79,8 @@ public class Room {
 
     //Permet d'ajouter tous les utilisateurs présents dans la base de données (simplifie la création de groupe)
     public void addListUserRoom(DefaultListModel usersMemberRoom) throws SQLException {
-        memberPseudoRoom = serverConnection.allPseudoFromBase();
-        memberIdUser = serverConnection.allIdUserFromBase();
+        memberPseudoRoom = bddConnection.allPseudoFromBase();
+        memberIdUser = bddConnection.allIdUserFromBase();
 
         for(int i = 0; i< memberPseudoRoom.size() ; i++){
             usersMemberRoom.addElement(memberPseudoRoom.get(i) +"#"+ memberIdUser.get(i));
@@ -90,10 +98,10 @@ public class Room {
         /*List<String> pseudoMemberNewGroup = new ArrayList<String>();
         pseudoMemberNewGroup = stringFromPseudo(groupMember);*/
 
-        idGroup = serverConnection.incrementGroupId();
+        idGroup = bddConnection.incrementGroupId();
 
-        serverConnection.insertIntoGroupes(idGroup,groupName);
-        serverConnection.insertIntoParticipantGroup(idGroup, listIdMemberNewGroup);
+        bddConnection.insertIntoGroupes(idGroup,groupName);
+        bddConnection.insertIntoParticipantGroup(idGroup, listIdMemberNewGroup);
 
     }
 
@@ -126,7 +134,7 @@ public class Room {
     //Permet de récupérer les messages du groupe sélectionner dans GuiRoom
     public void getGroupMessages(int idGroupe, List<Message> messagesList){
 
-        serverConnection.giveGroupMessages(idGroupe, messagesList);
+        bddConnection.giveGroupMessages(idGroupe, messagesList);
     }
 
 
@@ -143,7 +151,7 @@ public class Room {
     public String idToPseudo(int idUser){
 
         try {
-            return serverConnection.givePseudoFromId(idUser);
+            return bddConnection.givePseudoFromId(idUser);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -154,10 +162,17 @@ public class Room {
     public void sendMessageToServerConnection(int id, int idSelectedGroup, String message, String timeStamp) {
 
         try {
-            serverConnection.sendMessageToBDD(id, idSelectedGroup, message, timeStamp);
+            bddConnection.sendMessageToBDD(id, idSelectedGroup, message, timeStamp);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public void callServerTread(Message message, User user, JTextArea chatArea) throws IOException {
+        Socket socket = new Socket("localhost", 8082);
+        serverThread = new ServerThread(socket);
+        serverThread.run(message,user,chatArea);
 
     }
 }
