@@ -8,23 +8,19 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-
-
-public class FirstServer {
-
+public class ClientConnection {
 
     public static void main(String[] args){
-        ServerSocket socketserver;
-        Socket socketduserveur;
+
+        Socket socket;
         final BufferedReader in;
         final PrintWriter out;
         final Scanner sc = new Scanner(System.in);
 
         try {
-            socketserver = new ServerSocket(8082);
-            socketduserveur = socketserver.accept();
-            out = new PrintWriter(socketduserveur.getOutputStream());
-            in = new BufferedReader(new InputStreamReader(socketduserveur.getInputStream()));
+            socket = new Socket("192.168.1.53", 8082);
+            out = new PrintWriter(socket.getOutputStream());
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             Thread envoyer = new Thread(new Runnable() {
                 String message;
                 @Override
@@ -49,7 +45,7 @@ public class FirstServer {
                         catch (IOException e){
                             e.printStackTrace();
                         }
-                        System.out.println("Client: " + message);
+                        System.out.println("Serveur : " + message);
                     }
                 }
             });
