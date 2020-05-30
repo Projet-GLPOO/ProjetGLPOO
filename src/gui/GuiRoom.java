@@ -1,6 +1,7 @@
 package gui;
 
 import server.ServerConnection;
+import user.Message;
 import user.Room;
 import user.User;
 
@@ -24,6 +25,7 @@ public class GuiRoom implements ActionListener{
     private JButton createGroup;
     private Room room;
     private User user;
+    private List<Message> messagesList;
     private ServerConnection serverConnection;
 
 
@@ -47,6 +49,7 @@ public class GuiRoom implements ActionListener{
         user.setId(id);
         List<Integer> groupUserId = new ArrayList<Integer>();
         List<String> groupUserPseudo = new ArrayList<String>();
+        messagesList = new ArrayList<Message>();
         initialize();
 
     }
@@ -88,13 +91,15 @@ public class GuiRoom implements ActionListener{
         DefaultListModel model = new DefaultListModel();
         DefaultListModel modelParticipantGroup = new DefaultListModel();
 
-
+        //Affiche les membres appartenant au groupe sélectionner
         room.getDefaultListModel(model);
         JList listMemberGroup = new JList(model);
 
         MouseListener mouseListener = new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                room.showMembersGroup(listMemberGroup,modelParticipantGroup );
+                room.getMembersGroup(listMemberGroup,modelParticipantGroup);
+                room.getGroupMessages(room.getIdSelectedGroup(listMemberGroup), messagesList);
+                showGroupMessages(messagesList);
             }
         };
         listMemberGroup.addMouseListener(mouseListener);
@@ -262,15 +267,20 @@ public class GuiRoom implements ActionListener{
             }
         });
 
-
-
-
-
-
-
     }
 
 
+
+    public void showGroupMessages(List<Message> messageList){
+
+        Message message;
+
+        for(int i = 0; i < messageList.size(); i++){
+            message = messageList.get(i);
+            chatArea.append(room.idToPseudo(message.getUserID()) + "#" + message.getUserID() + " " + message.getPostDate().substring(0, message.getPostDate().length()-4) + "\n" + message.getMessage() + "\n\n");
+        }
+
+    }
 
 
 

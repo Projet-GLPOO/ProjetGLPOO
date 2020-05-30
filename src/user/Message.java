@@ -1,33 +1,32 @@
 package user;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Message {
 
-    List<User> contact;
+    int userId;
+    int groupId;
+    String message;
+    String postDate;
 
-    public void Room(){
-        contact = new ArrayList<User>();
-
+    public Message(int userId, int groupId, String message, String postDate){
+        this.userId = userId;
+        this.groupId = groupId;
+        this.message = message;
+        this.postDate = postDate;
     }
 
-
-    public void addContact(List<User> contact, User newContact) {
-        contact.add(newContact);
+    public int getUserID() {
+        return userId;
     }
 
-
-    public void removeContact(List<User>  contact, User oldContact) {
-        contact.remove(oldContact);
+    public int getGroupID() {
+        return groupId;
     }
 
-    public List<User> getContact() {
-        return contact;
+    public String getMessage() {
+        return message;
     }
 
-    public void setContact(List<User> contact) {
-        this.contact = contact;
+    public String getPostDate() {
+        return postDate;
     }
-
 }

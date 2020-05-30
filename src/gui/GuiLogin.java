@@ -15,8 +15,7 @@ public class GuiLogin {
     private JTextField txtProjetGlpoo;
     private JPasswordField passwordField;
     private static GuiLogin window ;
-
-    ServerConnection serverConnection;
+    private ServerConnection serverConnection;
 
 
 

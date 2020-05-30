@@ -4,7 +4,6 @@ import server.ServerConnection;
 
 import javax.swing.*;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +19,8 @@ public class Room {
     List<String> memberPseudoRoom;
     List<Integer> memberIdUser;
 
+    private List<Message> messageList;
+
     public Room(int id,ServerConnection serverConnection ){
         contact = new ArrayList<User>();
         userGroup = new ArrayList<Group>();
@@ -29,27 +30,12 @@ public class Room {
         memberIdGroup = new ArrayList<Integer>();
         memberPseudoRoom = new ArrayList<String>();
         memberIdUser = new ArrayList<Integer>();
-
+        messageList = new ArrayList<Message>();
     }
 
 
-    public void addContact(List<User> contact, User newContact) {
-        contact.add(newContact);
-    }
 
-
-    public void removeContact(List<User>  contact, User oldContact) {
-        contact.remove(oldContact);
-    }
-
-    public List<User> getContact() {
-        return contact;
-    }
-
-    public void setContact(List<User> contact) {
-        this.contact = contact;
-    }
-
+    //Récupère les groupes de l'utilisateur onnecté et les ajoute à une defaultListModel qui sera affiché dans la room
     public void getDefaultListModel (DefaultListModel model) throws SQLException {
         serverConnection.giveGroups(userGroup);
         for(int i = 0; i <userGroup.size();i++ ){
@@ -59,7 +45,9 @@ public class Room {
             }
         }
     }
-    public void showMembersGroup(JList listMemberGroup, DefaultListModel modelParticipantGroup ){
+
+    //Récupère tous les membres liés au groupe sélectionné dans la guiRoom
+    public void getMembersGroup(JList listMemberGroup, DefaultListModel modelParticipantGroup ){
         String tempIdGrp;
         List<Integer> groupUserId; // les id de tout les membres grp
         List<String> groupUserPseudo;
@@ -80,6 +68,8 @@ public class Room {
         }
     }
 
+
+    //Permet d'ajouter tous les utilisateurs présents dans la base de données (simplifie la création de groupe)
     public void addListUserRoom(DefaultListModel usersMemberRoom) throws SQLException {
         memberPseudoRoom = serverConnection.allPseudoFromBase();
         memberIdUser = serverConnection.allIdUserFromBase();
@@ -89,6 +79,8 @@ public class Room {
         }
     }
 
+
+    //Permet de créer un groupe
     public void createGroup(String groupName , List<String> groupMember ) throws SQLException {
         Connection conn;
 
@@ -102,11 +94,9 @@ public class Room {
 
        // serverConnection.insertIntoGroupes(idMemberNewGroup,pseudoMemberNewGroup);
 
-
-
-
     }
 
+    //Permet de récupérer le tag (id) d'un membre pour par la suite pouvoir l'insérer dans la base de données
     public List<Integer> idFromPseudo ( List<String> groupMember){
         List<Integer> idMemberNewGroup = new ArrayList<Integer>();
         String tempIdMemberGrp;
@@ -118,6 +108,7 @@ public class Room {
         return idMemberNewGroup;
     }
 
+    //Permet de récupérer le pseudo d'un membre
     public List<String> stringFromPseudo( List<String> groupMember ){
         List<String> pseudoMemberNewGroup = new ArrayList<String>();
 
@@ -131,7 +122,32 @@ public class Room {
         return pseudoMemberNewGroup;
     }
 
+    //Permet de récupérer les messages du groupe sélectionner dans GuiRoom
+    public void getGroupMessages(int idGroupe, List<Message> messagesList){
 
+        serverConnection.giveGroupMessages(idGroupe, messagesList);
+    }
+
+
+    //Permet de récupérer l'Id du groupe sélectioner dans GuiRoom
+    public int getIdSelectedGroup(JList listMemberGroup){
+        String tempIdGrp;
+        tempIdGrp = listMemberGroup.getSelectedValue().toString(); // Récupère le nom du groupe sélectionné
+        tempIdGrp =  tempIdGrp.substring(tempIdGrp.indexOf("#")+1,tempIdGrp.length()); //Dans le nom sélectionné récupère l'id du groupe
+
+        return Integer.parseInt(tempIdGrp);
+    }
+
+
+    public String idToPseudo(int idUser){
+
+        try {
+            return serverConnection.givePseudoFromId(idUser);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 

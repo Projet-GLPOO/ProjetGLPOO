@@ -1,5 +1,6 @@
 package server;
 import user.Group;
+import user.Message;
 import user.User;
 
 import java.awt.print.PrinterAbortException;
@@ -273,5 +274,58 @@ public class ServerConnection {
     //Todo
     }
 
+    public void giveGroupMessages(int groupId, List<Message>messageList) {
+
+        int utilisateurID;
+        String text;
+        String date;
+        Message message;
+        try {
+            PreparedStatement stmt = conn.prepareStatement("Select * from Messages WHERE Groupeid = ?");
+            try {
+                stmt.setInt(1, groupId);
+                ResultSet r = stmt.executeQuery();
+                while (r.next()) {
+                    utilisateurID = r.getInt("UtilisateurID");
+                    text = r.getString("message");
+                    date = r.getString("datePoste");
+                    message = new Message(utilisateurID, groupId, text, date);
+
+                    messageList.add(message);
+                }
+                conn.commit();
+            } catch (Exception e) {
+                conn.rollback();
+            }
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public String givePseudoFromId(int userid) throws SQLException {
+
+        String userPseudo = "null";
+
+        PreparedStatement stmt = conn.prepareStatement("Select pseudonyme from Utilisateurs where UtilisateurId = ?");
+        try{
+
+            stmt.setInt(1, userid);
+
+            ResultSet r = stmt.executeQuery();
+            while(r.next()) {
+                userPseudo = r.getString("Pseudonyme");
+                System.out.println(userPseudo);
+            }
+            conn.commit();
+        }
+        catch(Exception e){
+            conn.rollback();
+        }
+        stmt.close();
+
+        return userPseudo;
+    }
 }
 
