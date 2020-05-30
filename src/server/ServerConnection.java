@@ -242,36 +242,63 @@ public class ServerConnection {
         return listIdUser;
     }
 
-    public void insertIntoGroupes( List<Integer> idMemberNewGroup , List<String> pseudoMemberNewGroup) throws SQLException {
+    public void insertIntoGroupes(int idGroup, String groupName) throws SQLException {
       //TODO finir inserer dans groupes
+        PreparedStatement  stmt = conn.prepareStatement("Insert Into groupes values(?, ?, sysdate, null)");
+        try{
 
-        /*  int idMember;
-        String pseudoMember;
+            stmt.setInt(1, idGroup);
+            stmt.setString(2, groupName);
+            stmt.executeUpdate();
 
-        for(int i = 0; i < idMemberNewGroup.size(); i++) {
-            PreparedStatement  stmt = conn.prepareStatement();
-            try{
-                idMember = idMemberNewGroup.get(i);
-                pseudoMember = pseudoMemberNewGroup.get(i);
-                int r = stmt.executeUpdate("Insert Into groupes values(?, ?, sysdate, NULL)");
-
-
-                stmt.setInt(1, idMember);
-                stmt.setInt(2, pseudoMember);
-
-                conn.commit();
-            }
-            catch(Exception e){
-                conn.rollback();
-            }
+            conn.commit();
         }
-
-        stmt.close();*/
+        catch(Exception e){
+            conn.rollback();
+        }
+        stmt.close();
 
     }
 
-    public void insertIntoParticipantGroup( List<Integer> idMemberNewGroup , List<String> pseudoMemberNewGroup) throws SQLException{
+    public void insertIntoParticipantGroup( int idGroup , List<Integer> listUserIdNewGroup) throws SQLException{
     //Todo
+        //System.out.println(listUserIdNewGroup.size());
+        for (int i =0; i < listUserIdNewGroup.size(); i++) {
+            System.out.println(listUserIdNewGroup.get(i));
+            PreparedStatement stmt = conn.prepareStatement("Insert Into PARTICIPANTSGROUPE values(?, ?)");
+            try {
+                stmt.setInt(1, listUserIdNewGroup.get(i));
+                stmt.setInt(2, idGroup);
+                stmt.executeUpdate();
+
+                conn.commit();
+            } catch (Exception e) {
+                conn.rollback();
+            }
+            stmt.close();
+        }
+    }
+
+    public int incrementGroupId() throws SQLException {
+        int newId = 0;
+
+        PreparedStatement stmt = conn.prepareStatement("Select count(*) from groupes");
+
+        try{
+            ResultSet r = stmt.executeQuery();
+
+
+            while(r.next()){
+                newId = r.getInt("count(*)");
+            }
+            conn.commit();
+        }
+        catch(Exception e){
+            conn.rollback();
+        }
+        stmt.close();
+        newId += 1;
+        return newId;
     }
 
     public void giveGroupMessages(int groupId, List<Message>messageList) {

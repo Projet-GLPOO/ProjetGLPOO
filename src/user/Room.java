@@ -83,16 +83,17 @@ public class Room {
     //Permet de créer un groupe
     public void createGroup(String groupName , List<String> groupMember ) throws SQLException {
         Connection conn;
+        int idGroup;
+        List<Integer> listIdMemberNewGroup = new ArrayList<Integer>();
+        listIdMemberNewGroup = idFromPseudo(groupMember);
 
+        /*List<String> pseudoMemberNewGroup = new ArrayList<String>();
+        pseudoMemberNewGroup = stringFromPseudo(groupMember);*/
 
+        idGroup = serverConnection.incrementGroupId();
 
-        List<Integer> idMemberNewGroup = new ArrayList<Integer>();
-        idMemberNewGroup = idFromPseudo(groupMember);
-
-        List<String> pseudoMemberNewGroup = new ArrayList<String>();
-        pseudoMemberNewGroup = stringFromPseudo(groupMember);
-
-       // serverConnection.insertIntoGroupes(idMemberNewGroup,pseudoMemberNewGroup);
+        serverConnection.insertIntoGroupes(idGroup,groupName);
+        serverConnection.insertIntoParticipantGroup(idGroup, listIdMemberNewGroup);
 
     }
 
