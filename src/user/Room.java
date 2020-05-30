@@ -170,9 +170,9 @@ public class Room {
     }
 
     public void callServerTread(Message message, User user, JTextArea chatArea) throws IOException {
-        Socket socket = new Socket("localhost", 8082);
+      /*  Socket socket = new Socket("localhost", 8082);
         serverThread = new ServerThread(socket);
-        serverThread.run(message,user,chatArea);
+       // serverThread.run();*/
 
     }
 }

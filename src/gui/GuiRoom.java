@@ -6,7 +6,6 @@ import user.Room;
 import user.User;
 
 import javax.swing.*;
-import javax.swing.text.BadLocationException;
 import java.awt.event.*;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -27,7 +26,7 @@ public class GuiRoom implements ActionListener{
     private Room room;
     private User user;
     private List<Message> messagesList;
-    private BddConnection serverConnection;
+    private BddConnection bddConnection;
     private JList listMemberGroup;
 
 
@@ -44,10 +43,10 @@ public class GuiRoom implements ActionListener{
     /**
      * Create the application.
      */
-    public GuiRoom(String userName, String mdp, int id, BddConnection serverConnection) throws SQLException {
+    public GuiRoom(String userName, String mdp, int id, BddConnection bddConnection) throws SQLException {
         user = new User(userName, mdp);
-        this.serverConnection = serverConnection;
-        room = new Room(id, serverConnection );
+        this.bddConnection = bddConnection;
+        room = new Room(id, bddConnection );
         user.setId(id);
         List<Integer> groupUserId = new ArrayList<Integer>();
         List<String> groupUserPseudo = new ArrayList<String>();

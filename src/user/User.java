@@ -1,8 +1,9 @@
 package user;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class User {
+public class User implements Serializable {
     private String pseudo;
     private String mdp;
     private int id;
