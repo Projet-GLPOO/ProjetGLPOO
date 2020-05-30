@@ -150,6 +150,13 @@ public class Room {
     }
 
 
+    public void sendMessageToServerConnection(int id, int idSelectedGroup, String message, String timeStamp) {
 
+        try {
+            serverConnection.sendMessageToBDD(id, idSelectedGroup, message, timeStamp);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
+    }
 }

@@ -327,5 +327,23 @@ public class ServerConnection {
 
         return userPseudo;
     }
+
+    public void sendMessageToBDD(int userid, int selectedGroupId, String message, String timeStamp) throws SQLException {
+
+        PreparedStatement  stmt = conn.prepareStatement("Insert Into Messages values(?, ?, ?, sysdate)");
+        try{
+            stmt.setInt(1, userid);
+            stmt.setInt(2, selectedGroupId);
+            stmt.setString(3, message);
+            stmt.executeUpdate();
+
+            conn.commit();
+        }
+        catch(Exception e){
+            conn.rollback();
+        }
+        stmt.close();
+
+    }
 }
 

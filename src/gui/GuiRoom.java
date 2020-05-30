@@ -27,6 +27,7 @@ public class GuiRoom implements ActionListener{
     private User user;
     private List<Message> messagesList;
     private ServerConnection serverConnection;
+    private JList listMemberGroup;
 
 
 
@@ -93,7 +94,7 @@ public class GuiRoom implements ActionListener{
 
         //Affiche les membres appartenant au groupe sélectionner
         room.getDefaultListModel(model);
-        JList listMemberGroup = new JList(model);
+        listMemberGroup = new JList(model);
 
         MouseListener mouseListener = new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -140,12 +141,14 @@ public class GuiRoom implements ActionListener{
             case "SendAMessage":
                 //Récupération du message saisis par l'utilisateur
                 String message = messageToSendArea.getText();
+                String timeStamp = "null";
+
                 //Pour éviter l'envoie de lignes vides
                 String newline = System.getProperty("line.separator");
                 boolean hasNewline = message.contains(newline);
                 if((message.trim().length() > 0) && !hasNewline) {
                     //Réupération de l'heure de l'envoi
-                    String timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+                    timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
                     //Affichage du message dans le chatArea
                     int taille;
                     if(message.length() <= 25) {
@@ -170,13 +173,14 @@ public class GuiRoom implements ActionListener{
 
                     //Suppression du contenu de la zone de texte "messageToSendArea"
                     messageToSendArea.setText("");
-                    break;
                 }
                 else{
                     //Si le message est vide et remplit d'espace, il vaut mieux
                     //que le curseur revienne au début de la zone de texte
                     messageToSendArea.setText("");
                 }
+                room.sendMessageToServerConnection(user.getId(), room.getIdSelectedGroup(listMemberGroup), message, timeStamp);
+                break;
 
             case "CreateGroup":
                 try {
@@ -279,7 +283,6 @@ public class GuiRoom implements ActionListener{
             message = messageList.get(i);
             chatArea.append(room.idToPseudo(message.getUserID()) + "#" + message.getUserID() + " " + message.getPostDate().substring(0, message.getPostDate().length()-4) + "\n" + message.getMessage() + "\n\n");
         }
-
     }
 
 
