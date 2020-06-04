@@ -2,6 +2,7 @@ package gui;
 
 import bdd.BddConnection;
 import user.Message;
+import user.Observer;
 import user.Room;
 import user.User;
 
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class GuiRoom implements ActionListener{
+public class GuiRoom implements ActionListener, Observer {
 
     private JFrame frame;
     private JTextField nomSalonDeDiscussion;
@@ -298,10 +299,12 @@ public class GuiRoom implements ActionListener{
     }
 
 
+    @Override
+    public void update(String message, User user) {
 
-
-
-
-
+        String timeStamp = "null";
+        timeStamp = new SimpleDateFormat("DD/MM/YYYY HH:mm").format(Calendar.getInstance().getTime());
+        chatArea.append(user.getPseudo()+"#"+user.getId() + "  " + timeStamp + "\n" + message + "\n\n");
+    }
 }
 

@@ -38,8 +38,6 @@ public class GuiLogin {
             e.printStackTrace();
         }
         initialize();
-        //
-
     }
 
     public void initialize() {

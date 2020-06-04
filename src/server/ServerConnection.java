@@ -10,6 +10,5 @@ public class ServerConnection
 		AbstractServer as = new FirstServer();
 		String ip = "localhost";
 		as.connect(ip);
-		
 	}
 }

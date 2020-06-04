@@ -1,7 +1,6 @@
 package user;
 
 import bdd.BddConnection;
-import server.ClientConnection;
 import server.ServerThread;
 
 import javax.swing.*;
@@ -23,7 +22,7 @@ public class Room {
     List<String> memberPseudoRoom;
     List<Integer> memberIdUser;
     ServerThread serverThread;
-    ClientConnection clientConnection;
+    SimpleClient simpleClient;
 
     private List<Message> messageList;
 
@@ -37,9 +36,8 @@ public class Room {
         memberPseudoRoom = new ArrayList<String>();
         memberIdUser = new ArrayList<Integer>();
         messageList = new ArrayList<Message>();
-        clientConnection = new ClientConnection();
-        // faire new simple Client + Appeller connect
-
+        simpleClient = new SimpleClient();
+        simpleClient.connect("localhost");
     }
 
 
@@ -176,7 +174,9 @@ public class Room {
         serverThread.start();
 
     }
-    public void getSimpleCLient(){
-        //Todo
+
+    public void getSimpleClient(){
+
+
     }
 }

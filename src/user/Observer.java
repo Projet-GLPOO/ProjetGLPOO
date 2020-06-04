@@ -1,0 +1,6 @@
+package user;
+
+public interface Observer{
+
+    public void update(String message, User user);
+}
