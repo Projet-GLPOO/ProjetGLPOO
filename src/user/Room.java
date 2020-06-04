@@ -38,6 +38,7 @@ public class Room {
         memberIdUser = new ArrayList<Integer>();
         messageList = new ArrayList<Message>();
         clientConnection = new ClientConnection();
+        // faire new simple Client + Appeller connect
 
     }
 
@@ -174,5 +175,8 @@ public class Room {
         serverThread = new ServerThread(socket);
         serverThread.start();
 
+    }
+    public void getSimpleCLient(){
+        //Todo
     }
 }

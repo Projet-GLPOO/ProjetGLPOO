@@ -33,6 +33,8 @@ public class ServerThread extends Thread {
 			User user = new User("frfer", "john.doe");
 			output.writeObject(user);		//serialize and write the Student object to the stream
 
+			//Créer une (liste de Socket) = (nbr client)
+
  
         } catch (IOException ex) {
             System.out.println("Server exception: " + ex.getMessage());
@@ -50,6 +52,7 @@ public class ServerThread extends Thread {
 			}
 		}
     }
+
 
 
 

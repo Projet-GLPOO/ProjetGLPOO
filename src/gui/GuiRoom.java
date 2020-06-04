@@ -47,6 +47,7 @@ public class GuiRoom implements ActionListener{
         user = new User(userName, mdp);
         this.bddConnection = bddConnection;
         room = new Room(id, bddConnection );
+        //Room.registerobservateur(this)
         user.setId(id);
         List<Integer> groupUserId = new ArrayList<Integer>();
         List<String> groupUserPseudo = new ArrayList<String>();
@@ -295,7 +296,6 @@ public class GuiRoom implements ActionListener{
             chatArea.append(room.idToPseudo(message.getUserID()) + "#" + message.getUserID() + " " + message.getPostDate().substring(0, message.getPostDate().length()-4) + "\n" + message.getMessage() + "\n\n");
         }
     }
-
 
 
 
