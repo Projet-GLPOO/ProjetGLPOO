@@ -29,15 +29,7 @@ public class GuiRoom implements ActionListener, Observer {
     private List<Message> messagesList;
     private BddConnection bddConnection;
     private JList listMemberGroup;
-
-
-
-
-
-
-
-
-
+    private Observer observer;
 
 
 
@@ -54,7 +46,6 @@ public class GuiRoom implements ActionListener, Observer {
         List<String> groupUserPseudo = new ArrayList<String>();
         messagesList = new ArrayList<Message>();
         initialize();
-
     }
 
     /**
@@ -133,6 +124,9 @@ public class GuiRoom implements ActionListener, Observer {
         JList listContactGroup = new JList(modelParticipantGroup);
         listContactGroup.setBounds(800, 15, 125, 500);
         frame.getContentPane().add(listContactGroup);
+
+        //observer.update();
+
 
     }
 
@@ -298,13 +292,9 @@ public class GuiRoom implements ActionListener, Observer {
         }
     }
 
-
     @Override
-    public void update(String message, User user) {
+    public void update(String message) {
 
-        String timeStamp = "null";
-        timeStamp = new SimpleDateFormat("DD/MM/YYYY HH:mm").format(Calendar.getInstance().getTime());
-        chatArea.append(user.getPseudo()+"#"+user.getId() + "  " + timeStamp + "\n" + message + "\n\n");
     }
 }
 

@@ -185,7 +185,6 @@ public class BddConnection {
                 ResultSet r = stmt.executeQuery();
                 while(r.next()) {
                     userPseudo = r.getString("Pseudonyme");
-                    System.out.println(userPseudo);
                     listPseudo.add(userPseudo);
                 }
 
@@ -344,7 +343,6 @@ public class BddConnection {
             ResultSet r = stmt.executeQuery();
             while(r.next()) {
                 userPseudo = r.getString("Pseudonyme");
-                System.out.println(userPseudo);
             }
             conn.commit();
         }

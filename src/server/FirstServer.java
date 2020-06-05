@@ -17,7 +17,8 @@ public class FirstServer extends AbstractServer
 			while (true) {
 				Socket socket = ss.accept();//establishes connection 
 				System.out.println("Connected as " + ip);	
-				// create a new thread to handle client socket	
+				// create a new thread to handle client socket
+				System.out.println("1");
 				new ServerThread(socket).start();
 			}
 		} catch (IOException ioe) {

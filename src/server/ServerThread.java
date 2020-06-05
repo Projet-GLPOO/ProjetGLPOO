@@ -29,14 +29,14 @@ public class ServerThread extends Thread {
 			//create the streams that will handle the objects coming through the sockets
 			input = new ObjectInputStream(socket.getInputStream());
 			output = new ObjectOutputStream(socket.getOutputStream());
- 
+
  			String text = (String)input.readObject();  //read the object received through the stream and deserialize it
-			User user = (User)input.readObject();
+			//User user = (User)input.readObject();
 			System.out.println("server received a text:" + text);
-			System.out.println("server received a text:" + user.getPseudo());
+			//System.out.println("server received a text:" + user.getPseudo());
 
 			output.writeObject(text);
-			output.writeObject(user);		//serialize and write the Student object to the stream
+			//output.writeObject(user);		//serialize and write the Student object to the stream
 
 			//Créer une (liste de Socket) = (nbr client)
 			if(!socket.isConnected())

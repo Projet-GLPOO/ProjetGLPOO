@@ -10,38 +10,27 @@ import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 public class GuiLogin {
-    private JFrame frame;
+    public JFrame frame;
     private JTextField userNameField;
     private JTextField txtProjetGlpoo;
     private JPasswordField passwordField;
-    private static GuiLogin window ;
     private BddConnection bddConnection;
 
 
-
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                window = new GuiLogin();
-                window.frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+    public GuiLogin() {
+        initialize();
     }
 
-    public GuiLogin() {
+    public void initialize() {
+
+        frame = new JFrame();
+        frame.setVisible(true);
         bddConnection = new BddConnection();
         try {
             bddConnection.launchBddConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        initialize();
-    }
-
-    public void initialize() {
-        frame = new JFrame();
         frame.getContentPane().setForeground(new Color(0, 0, 0));
         frame.getContentPane().setBackground(new Color(240, 248, 255));
         frame.getContentPane().setLayout(null);
@@ -61,9 +50,8 @@ public class GuiLogin {
             @Override
             public void mouseClicked(MouseEvent arg0) {
                 if(bddConnection.loginConnection(userNameField.getText(), String.valueOf(passwordField.getPassword())) && arg0.getSource()==buttonLogin) {
-                    User user = new User(userNameField.getText(), String.valueOf(passwordField.getPassword()));
                     try {
-                        GuiRoom guiRoom = new GuiRoom(userNameField.getText(), String.valueOf(passwordField.getPassword()), bddConnection.giveId(user.getPseudo()), bddConnection);
+                        GuiRoom guiRoom = new GuiRoom(userNameField.getText(), String.valueOf(passwordField.getPassword()), bddConnection.giveId(userNameField.getText()), bddConnection);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }

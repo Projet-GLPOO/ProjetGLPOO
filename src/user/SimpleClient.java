@@ -31,18 +31,25 @@ public class SimpleClient implements Subject {
 			output = new ObjectOutputStream(socket.getOutputStream());
 			input = new ObjectInputStream(socket.getInputStream());
 
-			String textToSend = "null";
-			textToSend = "saut";//(String) input.readObject();
+			message = "saut";//(String) input.readObject();
             //User userToSend = (User) input.readObject();
-			System.out.println("text sent to the server: " + textToSend);
+			System.out.println("text sent to the server: " + message);
 			//System.out.println("\nuser sent to the server: " + userToSend.getPseudo());
-			output.writeObject(textToSend);		//serialize and write the String to the stream
-			textToSend = (String)input.readObject();
- 
-			//User user = (User) input.readObject();	//deserialize and read the Student object from the stream
+			output.writeObject(message);		//serialize and write the String to the stream
+
+
+
+
+			message = (String)input.readObject();
+			//registerObserver();
+			//notifyObservers();
+			System.out.println(message);
+
+			//String text = (String) input.readObject();	//deserialize and read the Student object from the stream
 			// notifier obs
+
 			//System.out.println("Received user id: " + user.getPseudo() + " and user name:" + user.getPseudo() + " from server");
-	    } catch  (IOException|ClassNotFoundException uhe) {
+	    } catch  (IOException | ClassNotFoundException uhe) {
 			uhe.printStackTrace();
 		} finally {
 			try {
@@ -73,7 +80,7 @@ public class SimpleClient implements Subject {
 		System.out.println("notify observers ");
 		for (int i = 0; i < observers.size(); i++) {
 			Observer o = observers.get(i);
-			o.update(message, user);
+			o.update(message);
 		}
 	}
 }
