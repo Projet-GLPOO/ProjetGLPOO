@@ -21,50 +21,50 @@ public class SimpleClient implements Observer{
 	String ip;
 
 
-	public SimpleClient(JTextArea chatArea) {
-		this.chatArea = chatArea;
-	}
-	public void connect(String ip)
-	{
+	public SimpleClient(JTextArea chatArea, String ip) {
 		this.ip =ip;
-
-
-	}
-
-	@Override
-	public void send(String message) {
-
-		if(socket == null){
-			try {
-				int port = 6666;
-				socket = new Socket(ip, port);
-				output = new ObjectOutputStream(socket.getOutputStream());
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		}
-
+		int port = 6666;
 		try {
-
-			output.writeObject(message);
-			System.out.println(message);
-
+			socket = new Socket(ip, port);
+			output = new ObjectOutputStream(socket.getOutputStream());
+			input = new ObjectInputStream(socket.getInputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		finally {
-			/*try {
 
-				output.close();
-				socket.close();
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-			}*/
-		}
+		this.chatArea = chatArea;
+		t.start();
 
 
 
 	}
+
+
+	@Override
+	public void send(String message) {
+		try {
+			output.writeObject(message);
+			System.out.println(message);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+
+	Thread t = new Thread() {
+		public void run() {
+			try {
+				message = (String) input.readObject();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			chatArea.append(message);
+			System.out.println("1" + message);
+		}
+	};
+
 }

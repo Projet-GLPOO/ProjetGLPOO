@@ -55,7 +55,8 @@ public class GuiRoom implements ActionListener {
         frame.getContentPane().setLayout(null);
         frame.setVisible(true);
         chatArea = new JTextArea();
-        Observer a = new SimpleClient(chatArea);
+        Observer a = new SimpleClient(chatArea,"localhost");
+
         room.registerObserver(a);
 
 
