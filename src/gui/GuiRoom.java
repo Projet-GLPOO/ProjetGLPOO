@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class GuiRoom implements ActionListener, Observer {
+public class GuiRoom implements ActionListener {
 
     private JFrame frame;
     private JTextField nomSalonDeDiscussion;
@@ -142,10 +142,8 @@ public class GuiRoom implements ActionListener, Observer {
                 Message message = new Message(user.getId(),Integer.parseInt(tempIdGrp),messageToSendArea.getText(),timeStamp );
                 String textmessage = messageToSendArea.getText();
                 try {
-                    Observer a = new SimpleClient();
                     room.callServerTread(message,user,chatArea);
-                    room.registerObserver(a);
-                    room.setText(message,chatArea);
+
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -292,9 +290,5 @@ public class GuiRoom implements ActionListener, Observer {
         }
     }
 
-    @Override
-    public void update(String message, JTextArea chatArea) {
-
-    }
 }
 
