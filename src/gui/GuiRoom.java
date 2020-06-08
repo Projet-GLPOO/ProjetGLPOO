@@ -54,6 +54,10 @@ public class GuiRoom implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().setLayout(null);
         frame.setVisible(true);
+        chatArea = new JTextArea();
+        Observer a = new SimpleClient(chatArea);
+        room.registerObserver(a);
+
 
 
 
@@ -99,7 +103,7 @@ public class GuiRoom implements ActionListener {
         listMemberGroup.setBounds(140, 15, 80, 500);
         frame.getContentPane().add(listMemberGroup);
 
-        chatArea = new JTextArea();
+
         chatArea.setBounds(240, 136, 538, 418);
         chatArea.setEditable(false);
         JScrollPane scrollChat = new JScrollPane(chatArea);
@@ -141,19 +145,14 @@ public class GuiRoom implements ActionListener {
                 timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
                 Message message = new Message(user.getId(),Integer.parseInt(tempIdGrp),messageToSendArea.getText(),timeStamp );
                 String textmessage = messageToSendArea.getText();
-                try {
-                    room.callServerTread(message,user,chatArea);
+                room.sendMessage(message);
 
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
 
                 //Pour éviter l'envoie de lignes vides
                /* String newline = System.getProperty("line.separator");
                 boolean hasNewline = message.contains(newline);
                 if((message.trim().length() > 0) && !hasNewline) {
                     //Réupération de l'heure de l'envoi
-
                     //Affichage du message dans le chatArea
                     int taille;
                     if(message.length() <= 25) {
@@ -175,7 +174,6 @@ public class GuiRoom implements ActionListener {
                     } catch (BadLocationException ex) {
                         ex.printStackTrace();
                     }
-
                     //Suppression du contenu de la zone de texte "messageToSendArea"
                     messageToSendArea.setText("");
                 }
@@ -261,12 +259,12 @@ public class GuiRoom implements ActionListener {
         sendMessageCreateGroupButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              String message = chatAreaCreateGroup.getText();
+                String message = chatAreaCreateGroup.getText();
 
-              for(int i =0 ; i < copyList.getModel().getSize(); i++){
-                  groupMember.add(copyList.getModel().getElementAt(i));
+                for(int i =0 ; i < copyList.getModel().getSize(); i++){
+                    groupMember.add(copyList.getModel().getElementAt(i));
 
-              }
+                }
 
                 try {
                     room.createGroup(message,groupMember);
@@ -290,5 +288,5 @@ public class GuiRoom implements ActionListener {
         }
     }
 
-}
 
+}

@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Room {
+public class Room implements Subject{
 
     List<User> contact;
     List<Group> userGroup;
@@ -22,7 +22,7 @@ public class Room {
     List<String> memberPseudoRoom;
     List<Integer> memberIdUser;
     ServerThread serverThread;
-    SimpleClient simpleClient;
+
     ArrayList<Observer> observers;
 
     private List<Message> messageList;
@@ -37,8 +37,7 @@ public class Room {
         memberPseudoRoom = new ArrayList<String>();
         memberIdUser = new ArrayList<Integer>();
         messageList = new ArrayList<Message>();
-        simpleClient = new SimpleClient();
-        simpleClient.connect("localhost");
+
         observers = new ArrayList<Observer>();
     }
 
@@ -169,12 +168,27 @@ public class Room {
         }
 
     }
+    public void sendMessage(Message message) {
+        notifyObservers(message.getMessage());
+    }
 
-    public void callServerTread(Message message, User user, JTextArea chatArea) throws IOException {
-        Socket socket = new Socket("localhost", 8082);
-        serverThread = new ServerThread(socket);
-        serverThread.start();
+    @Override
+    public void registerObserver(Observer o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(Observer o) {
 
     }
 
+    @Override
+    public void notifyObservers(String message) {
+        System.out.println("notify observers ");
+        for (int i = 0; i < observers.size(); i++) {
+            Observer o = observers.get(i);
+            o.send(message);
+        }
+
+    }
 }

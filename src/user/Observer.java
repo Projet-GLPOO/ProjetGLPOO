@@ -4,5 +4,5 @@ import javax.swing.*;
 
 public interface Observer{
 
-    public void update(String message, JTextArea chatArea);
+    public void send(String message);
 }
