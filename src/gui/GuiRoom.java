@@ -1,10 +1,7 @@
 package gui;
 
 import bdd.BddConnection;
-import user.Message;
-import user.Observer;
-import user.Room;
-import user.User;
+import user.*;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -145,7 +142,10 @@ public class GuiRoom implements ActionListener, Observer {
                 Message message = new Message(user.getId(),Integer.parseInt(tempIdGrp),messageToSendArea.getText(),timeStamp );
                 String textmessage = messageToSendArea.getText();
                 try {
+                    Observer a = new SimpleClient();
                     room.callServerTread(message,user,chatArea);
+                    room.registerObserver(a);
+                    room.setText(message,chatArea);
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -293,7 +293,7 @@ public class GuiRoom implements ActionListener, Observer {
     }
 
     @Override
-    public void update(String message) {
+    public void update(String message, JTextArea chatArea) {
 
     }
 }

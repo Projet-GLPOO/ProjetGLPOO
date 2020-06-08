@@ -1,14 +1,11 @@
 package user;
 
-import user.Message;
-import user.User;
-
 import javax.swing.*;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
-public class SimpleClient implements Subject {
+public class SimpleClient implements Observer {
 	
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
@@ -16,26 +13,28 @@ public class SimpleClient implements Subject {
 	private ArrayList<Observer> observers;
 	private User user;
 	private String message;
+	JTextArea chatArea;
+	String ip;
 
 	
 	public void connect(String ip)
 	{
-		int port = 6666;
-        try  {
+		this.ip=ip;
+       /* try  {
 
 
 			//create the socket; it is defined by an remote IP address (the address of the server) and a port number
-			socket = new Socket(ip, port);
+
 
 			//create the streams that will handle the objects coming and going through the sockets
-			output = new ObjectOutputStream(socket.getOutputStream());
-			input = new ObjectInputStream(socket.getInputStream());
+
+			/*input = new ObjectInputStream(socket.getInputStream());
 
 			message = "saut";//(String) input.readObject();
             //User userToSend = (User) input.readObject();
 			System.out.println("text sent to the server: " + message);
 			//System.out.println("\nuser sent to the server: " + userToSend.getPseudo());
-			output.writeObject(message);		//serialize and write the String to the stream
+					//serialize and write the String to the stream
 
 
 
@@ -43,7 +42,7 @@ public class SimpleClient implements Subject {
 			message = (String)input.readObject();
 			//registerObserver();
 			//notifyObservers();
-			System.out.println(message);
+
 
 			//String text = (String) input.readObject();	//deserialize and read the Student object from the stream
 			// notifier obs
@@ -59,28 +58,32 @@ public class SimpleClient implements Subject {
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 			}
+		}*/
+
+	}
+
+
+
+	@Override
+	public void update(String message, JTextArea chatArea) {
+		if(socket == null){
+			int port = 6666;
+
+			try {
+				socket = new Socket(ip, port);
+				output = new ObjectOutputStream(socket.getOutputStream());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-
-	}
-
-
-	@Override
-	public void registerObserver(Observer o) {
-		observers.add(o);
-	}
-
-	@Override
-	public void removeObserver(Observer o) {
-		int i = observers.indexOf(o);
-		if (i >= 0) observers.remove(i);
-	}
-
-	@Override
-	public void notifyObservers() {
-		System.out.println("notify observers ");
-		for (int i = 0; i < observers.size(); i++) {
-			Observer o = observers.get(i);
-			o.update(message);
+		this.message = message;
+		this.chatArea = chatArea;
+		chatArea.append(message);
+		try {
+			output.writeObject(message);
+			System.out.println(message);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

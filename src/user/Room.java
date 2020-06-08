@@ -23,6 +23,7 @@ public class Room {
     List<Integer> memberIdUser;
     ServerThread serverThread;
     SimpleClient simpleClient;
+    ArrayList<Observer> observers;
 
     private List<Message> messageList;
 
@@ -38,6 +39,7 @@ public class Room {
         messageList = new ArrayList<Message>();
         simpleClient = new SimpleClient();
         simpleClient.connect("localhost");
+        observers = new ArrayList<Observer>();
     }
 
 
@@ -174,9 +176,26 @@ public class Room {
         serverThread.start();
 
     }
+    public void registerObserver(Observer o)
+    {
+        observers.add(o);
+    }
 
-    public void getSimpleClient(){
+    public void removeObserver(Observer o)
+    {
+        int i = observers.indexOf(o);
+        if (i >= 0) observers.remove(i);
+    }
 
+    public void notifyObservers(String message , JTextArea chatArea) {
+        System.out.println("notify observers ");
+        for (int i = 0; i < observers.size(); i++) {
+            Observer o = observers.get(i);
+            o.update(message,chatArea);
+        }
+    }
 
+    public void setText(Message message, JTextArea chatArea) {
+        notifyObservers(message.getMessage(),chatArea);
     }
 }
