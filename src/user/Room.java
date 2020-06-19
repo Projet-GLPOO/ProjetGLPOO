@@ -137,7 +137,11 @@ public class Room implements Subject{
         bddConnection.giveGroupMessages(idGroupe, messagesList);
     }
 
-
+    /**
+     *
+     * @param listMemberGroup
+     * @return
+     */
     //Permet de récupérer l'Id du groupe sélectioner dans GuiRoom
     public int getIdSelectedGroup(JList listMemberGroup){
         String tempIdGrp;
@@ -147,7 +151,11 @@ public class Room implements Subject{
         return Integer.parseInt(tempIdGrp);
     }
 
-
+    /**
+     *
+     * @param idUser
+     * @return
+     */
     public String idToPseudo(int idUser){
 
         try {
@@ -158,7 +166,13 @@ public class Room implements Subject{
         return null;
     }
 
-
+    /**
+     *
+     * @param id
+     * @param idSelectedGroup
+     * @param message
+     * @param timeStamp
+     */
     public void sendMessageToServerConnection(int id, int idSelectedGroup, String message, String timeStamp) {
 
         try {
@@ -168,20 +182,37 @@ public class Room implements Subject{
         }
 
     }
+
+    /**
+     *
+     * @param message
+     */
     public void sendMessage(Message message) {
         notifyObservers(message.getMessage());
     }
 
+    /**
+     *
+     * @param o
+     */
     @Override
     public void registerObserver(Observer o) {
         observers.add(o);
     }
 
+    /**
+     *
+     * @param o
+     */
     @Override
     public void removeObserver(Observer o) {
 
     }
 
+    /**
+     *
+     * @param message
+     */
     @Override
     public void notifyObservers(String message) {
         System.out.println("notify observers ");

@@ -9,6 +9,10 @@ import java.sql.SQLException;
 
 public class GlpooMain {
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args){
 
         new GuiLogin();

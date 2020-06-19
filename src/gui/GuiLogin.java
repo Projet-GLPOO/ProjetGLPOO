@@ -46,6 +46,7 @@ public class GuiLogin {
         panel.add(lblNewLabel_1);
 
         Button buttonLogin = new Button("Login");
+
         buttonLogin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {

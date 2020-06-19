@@ -18,6 +18,10 @@ public class ServerThread extends Thread {
 	private ObjectOutputStream output;
 	private List<Socket> socketList;
 
+	/**
+	 *
+	 * @param socket
+	 */
     public ServerThread(Socket socket) {
         this.socket = socket;
 		socketList = new ArrayList<Socket>();

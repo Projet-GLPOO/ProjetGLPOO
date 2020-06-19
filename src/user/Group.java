@@ -11,11 +11,12 @@ public class Group {
     private String dateCreation;
 
 
-    /*public Group(List<User> memberGroup , int idGroup ) {
-        this.memberGroup = memberGroup;
-        this.idGroup = idGroup;
-    }*/
 
+    /**
+     *
+     * @param nomGroupe
+     * @param idGroup
+     */
 
 
     public Group(String nomGroupe , int idGroup ) {
@@ -23,22 +24,44 @@ public class Group {
         this.idGroup = idGroup;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<User> getMemberGroup() {
         return memberGroup;
     }
+
+    /**
+     *
+     * @param memberGroup
+     */
 
     public void setMemberGroup(List<User> memberGroup) {
         this.memberGroup = memberGroup;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getIdGroup() {
         return idGroup;
     }
+
+    /**
+     *
+     * @param idGroup
+     */
 
     public void setIdGroup(int idGroup) {
         this.idGroup = idGroup;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getNomGroupe() {
         return nomGroupe;
     }

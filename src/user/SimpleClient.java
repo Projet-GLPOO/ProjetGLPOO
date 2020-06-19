@@ -20,7 +20,11 @@ public class SimpleClient implements Observer{
 	JTextArea chatArea;
 	String ip;
 
-
+	/**
+	 *
+	 * @param chatArea
+	 * @param ip
+	 */
 	public SimpleClient(JTextArea chatArea, String ip) {
 		this.ip =ip;
 		int port = 6666;
@@ -40,7 +44,10 @@ public class SimpleClient implements Observer{
 
 	}
 
-
+	/**
+	 *
+	 * @param message
+	 */
 	@Override
 	public void send(String message) {
 		try {

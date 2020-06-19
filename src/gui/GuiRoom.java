@@ -29,9 +29,13 @@ public class GuiRoom implements ActionListener {
     private Observer observer;
 
 
-
     /**
-     * Create the application.
+     *
+     * @param userName
+     * @param mdp
+     * @param id
+     * @param bddConnection
+     * @throws SQLException
      */
     public GuiRoom(String userName, String mdp, int id, BddConnection bddConnection) throws SQLException {
         user = new User(userName, mdp);
@@ -132,6 +136,10 @@ public class GuiRoom implements ActionListener {
 
     }
 
+    /**
+     *
+     * @param e
+     */
 
     public void actionPerformed(ActionEvent e){
 
@@ -202,7 +210,10 @@ public class GuiRoom implements ActionListener {
         }
     }
 
-
+    /**
+     *
+     * @throws SQLException
+     */
     public void createFrame() throws SQLException {
         JFrame frameGroup = new JFrame();
         frameGroup.setBounds(200, 200, 500, 500);
@@ -278,7 +289,10 @@ public class GuiRoom implements ActionListener {
     }
 
 
-
+    /**
+     *
+     * @param messageList
+     */
     public void showGroupMessages(List<Message> messageList){
 
         Message message;
