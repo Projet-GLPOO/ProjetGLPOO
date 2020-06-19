@@ -125,7 +125,7 @@ public class Room implements Subject{
 
         for(int i = 0; i < groupMember.size() ; i++){
             tempPseudoMemberGrp = groupMember.get(i);
-            tempPseudoMemberGrp =  tempPseudoMemberGrp.substring(0,tempPseudoMemberGrp.indexOf("#")-1);
+            tempPseudoMemberGrp =  tempPseudoMemberGrp.substring(0,tempPseudoMemberGrp.indexOf("#"));
             pseudoMemberNewGroup.add(tempPseudoMemberGrp);
         }
         return pseudoMemberNewGroup;

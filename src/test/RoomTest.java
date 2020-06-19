@@ -41,16 +41,16 @@ public class RoomTest {
         testbdd.launchBddConnection();
         Room testroom = new Room(4,testbdd);
 
+        List<String> testGroupMember1 = new ArrayList<String>();
+        testGroupMember1.add("a#4");
+        List<String> testGroupMember2 = new ArrayList<String>();
+        testGroupMember2.add("a");
+        assertEquals(testGroupMember2, testroom.stringFromPseudo(testGroupMember1));
+
+
 
     }
 
-    @Test
-    public void getIdSelectedGroup() throws SQLException {
-        BddConnection testbdd = new BddConnection();
-        testbdd.launchBddConnection();
-        Room testroom = new Room(4,testbdd);
-
-    }
 
     @Test
     public void idToPseudo() throws SQLException {
