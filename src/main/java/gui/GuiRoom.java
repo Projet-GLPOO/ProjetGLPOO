@@ -5,7 +5,6 @@ import user.*;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,7 +40,6 @@ public class GuiRoom implements ActionListener {
         user = new User(userName, mdp);
         this.bddConnection = bddConnection;
         room = new Room(id, bddConnection );
-        //Room.registerobservateur(this)
         user.setId(id);
         List<Integer> groupUserId = new ArrayList<Integer>();
         List<String> groupUserPseudo = new ArrayList<String>();
@@ -89,7 +87,7 @@ public class GuiRoom implements ActionListener {
 
 
         DefaultListModel model = new DefaultListModel();
-        DefaultListModel modelParticipantGroup = new DefaultListModel();
+        final DefaultListModel modelParticipantGroup = new DefaultListModel();
 
         //Affiche les membres appartenant au groupe sélectionner
         room.getDefaultListModel(model);
@@ -131,7 +129,7 @@ public class GuiRoom implements ActionListener {
         listContactGroup.setBounds(800, 15, 125, 500);
         frame.getContentPane().add(listContactGroup);
 
-        //observer.update();
+
 
 
     }
@@ -143,21 +141,19 @@ public class GuiRoom implements ActionListener {
 
     public void actionPerformed(ActionEvent e){
 
-        switch(e.getActionCommand()){
-
-            case "SendAMessage":
-                //Récupération du message saisis par l'utilisateur
-                String tempIdGrp;
-                String timeStamp = "null";
-                tempIdGrp = listMemberGroup.getSelectedValue().toString(); // Récupère le nom du groupe sélectionné
-                tempIdGrp =  tempIdGrp.substring(tempIdGrp.indexOf("#")+1,tempIdGrp.length()); //Dans le nom sélectionné récupère l'id du groupe
-                timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
-                Message message = new Message(user.getId(),Integer.parseInt(tempIdGrp),messageToSendArea.getText(),timeStamp );
-                String textmessage = messageToSendArea.getText();
-                room.sendMessage(message);
+        String actionCommand = e.getActionCommand();
+        if ("SendAMessage".equals(actionCommand)) {//Récupération du message saisis par l'utilisateur
+            String tempIdGrp;
+            String timeStamp = "null";
+            tempIdGrp = listMemberGroup.getSelectedValue().toString(); // Récupère le nom du groupe sélectionné
+            tempIdGrp = tempIdGrp.substring(tempIdGrp.indexOf("#") + 1, tempIdGrp.length()); //Dans le nom sélectionné récupère l'id du groupe
+            timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+            Message message = new Message(user.getId(), Integer.parseInt(tempIdGrp), messageToSendArea.getText(), timeStamp);
+            String textmessage = messageToSendArea.getText();
+            room.sendMessage(message);
 
 
-                //Pour éviter l'envoie de lignes vides
+            //Pour éviter l'envoie de lignes vides
                /* String newline = System.getProperty("line.separator");
                 boolean hasNewline = message.contains(newline);
                 if((message.trim().length() > 0) && !hasNewline) {
@@ -191,22 +187,13 @@ public class GuiRoom implements ActionListener {
                     //que le curseur revienne au début de la zone de texte
                     messageToSendArea.setText("");
                 }*/
-                room.sendMessageToServerConnection(user.getId(), room.getIdSelectedGroup(listMemberGroup), textmessage, timeStamp);
-                break;
-
-            case "CreateGroup":
-                try {
-                    createFrame();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-                break;
-
-
-
-
-
-
+            room.sendMessageToServerConnection(user.getId(), room.getIdSelectedGroup(listMemberGroup), textmessage, timeStamp);
+        } else if ("CreateGroup".equals(actionCommand)) {
+            try {
+                createCreationGroupFrame();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
 
@@ -214,14 +201,14 @@ public class GuiRoom implements ActionListener {
      *
      * @throws SQLException
      */
-    public void createFrame() throws SQLException {
+    public void createCreationGroupFrame() throws SQLException {
         JFrame frameGroup = new JFrame();
         frameGroup.setBounds(200, 200, 500, 500);
         frameGroup.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frameGroup.getContentPane().setLayout(null);
         frameGroup.setVisible(true);
 
-        JTextArea chatAreaCreateGroup = new JTextArea();
+        final JTextArea chatAreaCreateGroup = new JTextArea();
         chatAreaCreateGroup.setBounds(1, 175, 500, 100);
         frameGroup.getContentPane().add(chatAreaCreateGroup);
 
@@ -229,12 +216,12 @@ public class GuiRoom implements ActionListener {
 
         DefaultListModel modelusersMembersRoom = new DefaultListModel();
         room.addListUserRoom(modelusersMembersRoom);
-        JList usersMemberRoom = new JList(modelusersMembersRoom);
+        final JList usersMemberRoom = new JList(modelusersMembersRoom);
         usersMemberRoom.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         usersMemberRoom.setBounds(0, 0, 175, 150);
         frameGroup.getContentPane().add(usersMemberRoom);
 
-        DefaultListModel modelcopyList = new DefaultListModel();
+        final DefaultListModel modelcopyList = new DefaultListModel();
 
         JButton Copygroup = new JButton();
         Copygroup = new JButton("Copy");
@@ -256,7 +243,7 @@ public class GuiRoom implements ActionListener {
 
 
 
-        JList<String> copyList = new JList<String>(modelcopyList);
+        final JList<String> copyList = new JList<String>(modelcopyList);
         copyList.setBounds(310, 0, 175, 150);
         frameGroup.getContentPane().add(copyList);
 
@@ -267,7 +254,7 @@ public class GuiRoom implements ActionListener {
         sendMessageCreateGroupButton.setEnabled(true);
         frameGroup.getContentPane().add(sendMessageCreateGroupButton);
 
-        List<String> groupMember = new ArrayList<String>();
+        final List<String> groupMember = new ArrayList<String>();
         sendMessageCreateGroupButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

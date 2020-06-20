@@ -45,7 +45,7 @@ public class GuiLogin {
         lblNewLabel_1.setIcon(new ImageIcon("./files/image/loginImage.png"));
         panel.add(lblNewLabel_1);
 
-        Button buttonLogin = new Button("Login");
+        final Button buttonLogin = new Button("Login");
 
         buttonLogin.addMouseListener(new MouseAdapter() {
             @Override
