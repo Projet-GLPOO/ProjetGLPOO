@@ -1,13 +1,18 @@
 package server;
 
+import org.h2.tools.Server;
+
 import javax.swing.*;
 import java.io.*;
-import java.net.*; 
+import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FirstServer extends AbstractServer
 {
 	private String ip = "localhost";
 	private ServerSocket ss;
+	private List<ServerThread> clientConnectionList = new ArrayList<>();
 
 	/**
 	 *
@@ -23,8 +28,9 @@ public class FirstServer extends AbstractServer
 				Socket socket = ss.accept();//establishes connection
 				System.out.println("Connected as " + ip);
 				// create a new thread to handle client socket
-				System.out.println("1");
-				new ServerThread(socket).start();
+				ServerThread serverThread = new ServerThread(socket, clientConnectionList);
+				clientConnectionList.add(serverThread);
+				new Thread(serverThread).start();
 			}
 		} catch (IOException ioe) {
 			ioe.printStackTrace();

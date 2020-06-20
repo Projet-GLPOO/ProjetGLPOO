@@ -17,12 +17,14 @@ public class ServerThread extends Thread {
 	private ObjectInputStream input;
 	private ObjectOutputStream output;
 	private List<Socket> socketList;
+	List<ServerThread> clientConnectionList;
 
 	/**
 	 *
 	 * @param socket
 	 */
-    public ServerThread(Socket socket) {
+    public ServerThread(Socket socket, List<ServerThread> clientConnectionList) {
+    	this.clientConnectionList = clientConnectionList;
         this.socket = socket;
 		socketList = new ArrayList<Socket>();
 		try {
@@ -40,7 +42,9 @@ public class ServerThread extends Thread {
 				//create the streams that will handle the objects coming through the sockets
 				text = (String) input.readObject();  //read the object received through the stream and deserialize it
 				System.out.println("server received a text:" + text);
-				output.writeObject(text);
+				for(int i = 0; i < clientConnectionList.size(); i++){
+					clientConnectionList.get(i).output.writeObject(text);
+				}
 				//Créer une (liste de Socket) = (nbr client)
 			} catch (IOException | ClassNotFoundException ex) {
 				System.out.println("Server exception: " + ex.getMessage());
