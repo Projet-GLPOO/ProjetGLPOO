@@ -1,6 +1,7 @@
 package gui;
 
 import bdd.BddConnection;
+import server.ServerThread;
 import user.*;
 
 import javax.swing.*;
@@ -20,11 +21,14 @@ public class GuiRoom implements ActionListener {
 
     private JButton sendMessageButton;
     private JButton createGroup;
+    private JButton refreshButton;
     private Room room;
     private User user;
     private List<Message> messagesList;
     private BddConnection bddConnection;
-    private JList listMemberGroup;
+    private JList groupList;
+    private DefaultListModel modelParticipantGroup = new DefaultListModel();
+    private DefaultListModel model;
     private Observer observer;
 
 
@@ -57,6 +61,7 @@ public class GuiRoom implements ActionListener {
         frame.getContentPane().setLayout(null);
         frame.setVisible(true);
         chatArea = new JTextArea();
+        chatArea.setVisible(false);
         Observer a = new SimpleClient(chatArea,"localhost");
 
         room.registerObserver(a);
@@ -75,8 +80,18 @@ public class GuiRoom implements ActionListener {
         sendMessageButton.setBounds(824, 620, 110, 25);
         sendMessageButton.setActionCommand("SendAMessage");
         sendMessageButton.addActionListener(this);
-        sendMessageButton.setEnabled(true);
+        sendMessageButton.setEnabled(false);
         frame.getContentPane().add(sendMessageButton);
+
+        refreshButton = new JButton("Refresh groups' list");
+        refreshButton.setBounds(5, 550, 200, 25);
+        refreshButton.setActionCommand("RefreshGroupsList");
+        refreshButton.addActionListener(this);
+        refreshButton.setEnabled(true);
+        frame.getContentPane().add(refreshButton);
+
+
+
 
         createGroup = new JButton("New Group");
         createGroup.setBounds(824, 660, 110, 25);
@@ -86,25 +101,26 @@ public class GuiRoom implements ActionListener {
         frame.getContentPane().add(createGroup);
 
 
-        DefaultListModel model = new DefaultListModel();
-        final DefaultListModel modelParticipantGroup = new DefaultListModel();
+        model = new DefaultListModel();
 
         //Affiche les membres appartenant au groupe sélectionner
         room.getDefaultListModel(model);
-        listMemberGroup = new JList(model);
+        groupList = new JList(model);
 
         MouseListener mouseListener = new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                chatArea.setVisible(true);
+                sendMessageButton.setEnabled(true);
                 chatArea.setText("");
-                room.getMembersGroup(listMemberGroup,modelParticipantGroup);
-                room.getGroupMessages(room.getIdSelectedGroup(listMemberGroup), messagesList);
+                room.getMembersGroup(groupList,modelParticipantGroup);
+                room.getGroupMessages(room.getIdSelectedGroup(groupList), messagesList);
                 showGroupMessages(messagesList);
             }
         };
-        listMemberGroup.addMouseListener(mouseListener);
+        groupList.addMouseListener(mouseListener);
 
-        listMemberGroup.setBounds(140, 15, 80, 500);
-        frame.getContentPane().add(listMemberGroup);
+        groupList.setBounds(50, 15, 150, 500);
+        frame.getContentPane().add(groupList);
 
 
         chatArea.setBounds(240, 136, 538, 418);
@@ -125,13 +141,9 @@ public class GuiRoom implements ActionListener {
         frame.getContentPane().add(nomSalonDeDiscussion);
 
 
-        JList listContactGroup = new JList(modelParticipantGroup);
-        listContactGroup.setBounds(800, 15, 125, 500);
-        frame.getContentPane().add(listContactGroup);
-
-
-
-
+        JList membersFromGroupList = new JList(modelParticipantGroup);
+        membersFromGroupList.setBounds(815, 15, 150, 500);
+        frame.getContentPane().add(membersFromGroupList);
     }
 
     /**
@@ -139,30 +151,44 @@ public class GuiRoom implements ActionListener {
      * @param e
      */
 
-    public void actionPerformed(ActionEvent e){
+    public void actionPerformed(ActionEvent e) {
 
-        String actionCommand = e.getActionCommand();
-        if ("SendAMessage".equals(actionCommand)) {//Récupération du message saisis par l'utilisateur
-            String tempIdGrp;
-            String timeStamp = "null";
-            tempIdGrp = listMemberGroup.getSelectedValue().toString(); // Récupère le nom du groupe sélectionné
-            tempIdGrp = tempIdGrp.substring(tempIdGrp.indexOf("#") + 1, tempIdGrp.length()); //Dans le nom sélectionné récupère l'id du groupe
-            timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-            Message message = new Message(user, Integer.parseInt(tempIdGrp), messageToSendArea.getText().trim(), timeStamp);
-            if(!message.getMessage().equals("")) {
-                //Message qu'on envoie au serveur
-                room.sendMessage(message);
-                messageToSendArea.setText("");
+        switch (e.getActionCommand()) {
+            case "SendAMessage":
+                //Récupération du message saisis par l'utilisateur
+                String tempIdGrp;
+                String timeStamp = "null";
+                tempIdGrp = groupList.getSelectedValue().toString(); // Récupère le nom du groupe sélectionné
+                tempIdGrp = tempIdGrp.substring(tempIdGrp.indexOf("#") + 1, tempIdGrp.length()); //Dans le nom sélectionné récupère l'id du groupe
+                timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+                Message message = new Message(user, Integer.parseInt(tempIdGrp), messageToSendArea.getText().trim(), timeStamp);
+                if (!message.getMessage().equals("")) {
+                    //Message qu'on envoie au serveur
+                    room.sendMessage(message);
+                    messageToSendArea.setText("");
 
-                //Message qu'on envoie à la base de donnée
-                room.sendMessageToServerConnection(user.getId(), room.getIdSelectedGroup(listMemberGroup), message.getMessage().trim(), timeStamp);
-            }
-        } else if ("CreateGroup".equals(actionCommand)) {
-            try {
-                createCreationGroupFrame();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
+                    //Message qu'on envoie à la base de donnée
+                    room.sendMessageToServerConnection(user.getId(), room.getIdSelectedGroup(groupList), message.getMessage().trim(), timeStamp);
+                }
+                break;
+
+            case "CreateGroup":
+                try {
+                    createCreationGroupFrame();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                break;
+
+            case "RefreshGroupsList":
+                groupList.removeAll();
+                try {
+                    room.getDefaultListModel(model);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+                groupList.setModel(model);
+                break;
         }
     }
 

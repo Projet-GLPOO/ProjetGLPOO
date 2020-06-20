@@ -43,9 +43,12 @@ public class Room implements Subject{
 
 
 
-    //Récupère les groupes de l'utilisateur onnecté et les ajoute à une defaultListModel qui sera affiché dans la room
+    //Récupère les groupes de l'utilisateur connecté et les ajoute à une defaultListModel qui sera affiché dans la room
     public void getDefaultListModel (DefaultListModel model) throws SQLException {
+        userGroup.clear();
         bddConnection.giveGroups(userGroup);
+        model.clear();
+        model.removeAllElements();
         for(int i = 0; i <userGroup.size();i++ ){
             memberIdGroup = bddConnection.giveGroupUsers(userGroup.get(i).getIdGroup());
             if(bddConnection.verifUserGroup(idUser, memberIdGroup)){
