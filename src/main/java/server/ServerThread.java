@@ -35,22 +35,17 @@ public class ServerThread extends Thread {
     }
 	public void run() {
 		String text;
-		try {
-			//create the streams that will handle the objects coming through the sockets
-			text = (String) input.readObject();  //read the object received through the stream and deserialize it
-			System.out.println("server received a text:" + text);
-			output.writeObject(text);
-		//Créer une (liste de Socket) = (nbr client)
-		} catch (IOException | ClassNotFoundException ex) {
-			System.out.println("Server exception: " + ex.getMessage());
-			ex.printStackTrace();
-		} finally {
+    	while(true) {
 			try {
-				output.close();
-				input.close();
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
+				//create the streams that will handle the objects coming through the sockets
+				text = (String) input.readObject();  //read the object received through the stream and deserialize it
+				System.out.println("server received a text:" + text);
+				output.writeObject(text);
+				//Créer une (liste de Socket) = (nbr client)
+			} catch (IOException | ClassNotFoundException ex) {
+				System.out.println("Server exception: " + ex.getMessage());
+				ex.printStackTrace();
 			}
-		}
+    	}
     }
 }

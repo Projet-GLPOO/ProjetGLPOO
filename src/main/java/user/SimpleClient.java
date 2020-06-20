@@ -16,7 +16,7 @@ public class SimpleClient implements Observer{
 	private Socket socket;
 	private ArrayList<Observer> observers;
 	private User user;
-	private String message ="";
+	private String message = null;
 	JTextArea chatArea;
 	String ip;
 
@@ -64,15 +64,15 @@ public class SimpleClient implements Observer{
 	Thread t = new Thread() {
 		public void run() {
 			try {
-				message = (String) input.readObject();
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
+				while(true) {
+					message = (String) input.readObject();
+					if(message == null)
+						break;
+					chatArea.append(message + "\n");
+				}
+			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-			chatArea.append(message);
-			System.out.println("1" + message);
 		}
 	};
 
