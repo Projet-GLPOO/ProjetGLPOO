@@ -7,7 +7,9 @@ import user.User;
 import javax.swing.*;
 import java.io.*;
 import java.net.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class SimpleClient implements Observer{
 
@@ -15,8 +17,8 @@ public class SimpleClient implements Observer{
 	private ObjectInputStream input;
 	private Socket socket;
 	private ArrayList<Observer> observers;
-	JTextArea chatArea;
-	String ip;
+	private JTextArea chatArea;
+	private String ip;
 
 	/**
 	 *
@@ -62,7 +64,7 @@ public class SimpleClient implements Observer{
 					Message message = (Message) input.readObject();
 					if(message == null)
 						break;
-					chatArea.append(message.getUser().getPseudo() + "#" + message.getUserID() + " " + message.getPostDate().substring(0, message.getPostDate().length()-4) + "\n" + message.getMessage() + "\n\n");
+					chatArea.append(message.getUser().getPseudo() + "#" + message.getUser().getId() + " " + message.getPostDate() + "\n" + message.getMessage() + "\n\n");
 					//chatArea.append(message.getMessage() + "\n");
 				}
 			} catch (IOException | ClassNotFoundException e) {

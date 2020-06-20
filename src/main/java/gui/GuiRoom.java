@@ -147,49 +147,16 @@ public class GuiRoom implements ActionListener {
             String timeStamp = "null";
             tempIdGrp = listMemberGroup.getSelectedValue().toString(); // Récupère le nom du groupe sélectionné
             tempIdGrp = tempIdGrp.substring(tempIdGrp.indexOf("#") + 1, tempIdGrp.length()); //Dans le nom sélectionné récupère l'id du groupe
-            timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
-            Message message = new Message(user, Integer.parseInt(tempIdGrp), messageToSendArea.getText(), timeStamp);
-            String textmessage = messageToSendArea.getText();
-            //Message qu'on envoie au serveur
-            room.sendMessage(message);
+            timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+            Message message = new Message(user, Integer.parseInt(tempIdGrp), messageToSendArea.getText().trim(), timeStamp);
+            if(!message.getMessage().equals("")) {
+                //Message qu'on envoie au serveur
+                room.sendMessage(message);
+                messageToSendArea.setText("");
 
-
-            //Pour éviter l'envoie de lignes vides
-               /* String newline = System.getProperty("line.separator");
-                boolean hasNewline = message.contains(newline);
-                if((message.trim().length() > 0) && !hasNewline) {
-                    //Réupération de l'heure de l'envoi
-                    //Affichage du message dans le chatArea
-                    int taille;
-                    if(message.length() <= 25) {
-                        chatArea.append(user.getPseudo()+"#"+user.getId() + "  " + timeStamp + "\n" + message + "\n\n");
-                    }
-                    if(message.length() > 25) {
-                        taille = 93;
-                        chatArea.append("Pseudo" + "  " + timeStamp + "\n" + message.substring(0,93) +"\n");
-                        while (taille <message.length())
-                            if (taille >= message.length()) {
-                                chatArea.append(message.substring(93, message.length()) + "\n");
-                            }else {
-                                taille+=93;
-                                chatArea.append(message.substring(taille-92, taille) + "\n");
-                            }
-                    }
-                    try {
-                        chatArea.setCaretPosition(chatArea.getLineEndOffset(chatArea.getLineCount() - 1));
-                    } catch (BadLocationException ex) {
-                        ex.printStackTrace();
-                    }
-                    //Suppression du contenu de la zone de texte "messageToSendArea"
-                    messageToSendArea.setText("");
-                }
-                else{
-                    //Si le message est vide et remplit d'espace, il vaut mieux
-                    //que le curseur revienne au début de la zone de texte
-                    messageToSendArea.setText("");
-                }*/
-               //Message qu'on envoie à la base de donnée
-            room.sendMessageToServerConnection(user.getId(), room.getIdSelectedGroup(listMemberGroup), textmessage, timeStamp);
+                //Message qu'on envoie à la base de donnée
+                room.sendMessageToServerConnection(user.getId(), room.getIdSelectedGroup(listMemberGroup), message.getMessage().trim(), timeStamp);
+            }
         } else if ("CreateGroup".equals(actionCommand)) {
             try {
                 createCreationGroupFrame();

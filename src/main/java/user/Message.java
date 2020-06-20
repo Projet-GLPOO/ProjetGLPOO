@@ -74,4 +74,8 @@ public class Message implements Serializable {
     public User getUser(){
         return user;
     }
+
+    public void setMessageWithFormat(String message) {
+        message.trim();
+    }
 }
