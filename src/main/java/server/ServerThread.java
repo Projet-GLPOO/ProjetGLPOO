@@ -36,14 +36,14 @@ public class ServerThread extends Thread {
 		}
     }
 	public void run() {
-		String text;
+		Message message;
     	while(true) {
 			try {
 				//create the streams that will handle the objects coming through the sockets
-				text = (String) input.readObject();  //read the object received through the stream and deserialize it
-				System.out.println("server received a text:" + text);
-				for(int i = 0; i < clientConnectionList.size(); i++){
-					clientConnectionList.get(i).output.writeObject(text);
+				message = (Message) input.readObject();  //read the object received through the stream and deserialize it
+				System.out.println("server received a text:" + message.getMessage());
+				for (ServerThread serverThread : clientConnectionList) {
+					serverThread.output.writeObject(message);
 				}
 				//Créer une (liste de Socket) = (nbr client)
 			} catch (IOException | ClassNotFoundException ex) {

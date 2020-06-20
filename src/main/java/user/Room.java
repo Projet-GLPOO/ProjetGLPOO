@@ -188,7 +188,7 @@ public class Room implements Subject{
      * @param message
      */
     public void sendMessage(Message message) {
-        notifyObservers(message.getMessage());
+        notifyObservers(message);
     }
 
     /**
@@ -214,10 +214,9 @@ public class Room implements Subject{
      * @param message
      */
     @Override
-    public void notifyObservers(String message) {
+    public void notifyObservers(Message message) {
         System.out.println("notify observers ");
-        for (int i = 0; i < observers.size(); i++) {
-            Observer o = observers.get(i);
+        for (Observer o : observers) {
             o.send(message);
         }
 

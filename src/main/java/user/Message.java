@@ -1,7 +1,10 @@
 package user;
 
-public class Message {
+import java.io.Serializable;
 
+public class Message implements Serializable {
+
+    User user;
     int userId;
     int groupId;
     String message;
@@ -16,6 +19,20 @@ public class Message {
      */
     public Message(int userId, int groupId, String message, String postDate){
         this.userId = userId;
+        this.groupId = groupId;
+        this.message = message;
+        this.postDate = postDate;
+    }
+
+    /**
+     *
+     * @param user
+     * @param groupId
+     * @param message
+     * @param postDate
+     */
+    public Message(User user, int groupId, String message, String postDate){
+        this.user = user;
         this.groupId = groupId;
         this.message = message;
         this.postDate = postDate;
@@ -52,5 +69,9 @@ public class Message {
      */
     public String getPostDate() {
         return postDate;
+    }
+
+    public User getUser(){
+        return user;
     }
 }

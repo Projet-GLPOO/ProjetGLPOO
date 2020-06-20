@@ -7,5 +7,5 @@ public interface Observer{
      *
      * @param message
      */
-    public void send(String message);
+    public void send(Message message);
 }

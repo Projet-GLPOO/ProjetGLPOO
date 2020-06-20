@@ -148,8 +148,9 @@ public class GuiRoom implements ActionListener {
             tempIdGrp = listMemberGroup.getSelectedValue().toString(); // Récupère le nom du groupe sélectionné
             tempIdGrp = tempIdGrp.substring(tempIdGrp.indexOf("#") + 1, tempIdGrp.length()); //Dans le nom sélectionné récupère l'id du groupe
             timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
-            Message message = new Message(user.getId(), Integer.parseInt(tempIdGrp), messageToSendArea.getText(), timeStamp);
+            Message message = new Message(user, Integer.parseInt(tempIdGrp), messageToSendArea.getText(), timeStamp);
             String textmessage = messageToSendArea.getText();
+            //Message qu'on envoie au serveur
             room.sendMessage(message);
 
 
@@ -187,6 +188,7 @@ public class GuiRoom implements ActionListener {
                     //que le curseur revienne au début de la zone de texte
                     messageToSendArea.setText("");
                 }*/
+               //Message qu'on envoie à la base de donnée
             room.sendMessageToServerConnection(user.getId(), room.getIdSelectedGroup(listMemberGroup), textmessage, timeStamp);
         } else if ("CreateGroup".equals(actionCommand)) {
             try {
@@ -289,6 +291,4 @@ public class GuiRoom implements ActionListener {
             chatArea.append(room.idToPseudo(message.getUserID()) + "#" + message.getUserID() + " " + message.getPostDate().substring(0, message.getPostDate().length()-4) + "\n" + message.getMessage() + "\n\n");
         }
     }
-
-
 }

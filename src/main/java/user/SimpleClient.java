@@ -15,8 +15,6 @@ public class SimpleClient implements Observer{
 	private ObjectInputStream input;
 	private Socket socket;
 	private ArrayList<Observer> observers;
-	private User user;
-	private String message = null;
 	JTextArea chatArea;
 	String ip;
 
@@ -26,7 +24,7 @@ public class SimpleClient implements Observer{
 	 * @param ip
 	 */
 	public SimpleClient(JTextArea chatArea, String ip) {
-		this.ip =ip;
+		this.ip = ip;
 		int port = 6666;
 		try {
 			socket = new Socket(ip, port);
@@ -38,10 +36,6 @@ public class SimpleClient implements Observer{
 
 		this.chatArea = chatArea;
 		t.start();
-
-
-
-
 	}
 
 	/**
@@ -49,10 +43,10 @@ public class SimpleClient implements Observer{
 	 * @param message
 	 */
 	@Override
-	public void send(String message) {
+	public void send(Message message) {
 		try {
 			output.writeObject(message);
-			System.out.println(message);
+			System.out.println(message.getMessage());
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -65,10 +59,11 @@ public class SimpleClient implements Observer{
 		public void run() {
 			try {
 				while(true) {
-					message = (String) input.readObject();
+					Message message = (Message) input.readObject();
 					if(message == null)
 						break;
-					chatArea.append(message + "\n");
+					chatArea.append(message.getUser().getPseudo() + "#" + message.getUserID() + " " + message.getPostDate().substring(0, message.getPostDate().length()-4) + "\n" + message.getMessage() + "\n\n");
+					//chatArea.append(message.getMessage() + "\n");
 				}
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();

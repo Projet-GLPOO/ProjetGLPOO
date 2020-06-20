@@ -17,5 +17,5 @@ public interface Subject {
      *
      * @param message
      */
-    public void notifyObservers(String message);
+    public void notifyObservers(Message message);
 }
