@@ -35,6 +35,10 @@ Elle met en également en place des interfaces graphiques permettant une navigat
 Tout d'abord, il vous faudra lancé la base de donnée H2 après avoir mis le fichier au bon endroit (C:\\Users\\"nom d'utilisateur"\\"le fichier.mv.db"). 
 L'utilisateur est "sa" et le mot de passe est "glpoo".
 
+(car bug Maven) IL FAUT ENSUITE LANCER LE PROGRAMME VIA UN IDE (de préférence IntelliJ) SELON LA SEQUENCE SUIVANTE :
+	-ServerConnection
+	-GlpooMain
+
 Quand vous lancez l'application, vous arrivez sur une interface vous demandant un nom d'utilisateur et un mot de passe (username: Guest /// mot de passe: glpoo).
 Une fois connecté, vous pouvez choisir un groupe pour commencer à discuter avec d'autres utilisateurs (connectés en local), ou créer un nouveau groupe (cette fonctionnalité ne fonctionne que du coté de la base de donnée et nécessite de cliquer sur le bouton de rafraichissement).
 Bien entendu, seuls les utilisateurs faisant partis du groupe pourront voir les messages que vous envoyez.
