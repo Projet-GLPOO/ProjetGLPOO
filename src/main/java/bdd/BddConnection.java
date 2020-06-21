@@ -14,6 +14,10 @@ public class BddConnection {
 
     private Connection conn;
 
+    /**
+     *
+     * @throws SQLException
+     */
     public void launchBddConnection() throws SQLException {
 
         try {
@@ -26,6 +30,9 @@ public class BddConnection {
         }
     }
 
+    /**
+     *
+     */
     public void closeBddConnection(){
         if(conn !=null) {
             try {
@@ -36,6 +43,12 @@ public class BddConnection {
         }
     }
 
+    /**
+     *
+     * @param userName
+     * @param password
+     * @return
+     */
     public boolean loginConnection(String userName, String password){
 
         try {
@@ -65,7 +78,11 @@ public class BddConnection {
     }
 
 
-
+    /**
+     *
+     * @param pseudo
+     * @return
+     */
     public int giveId(String pseudo) {
         int id = 0;
         try {
@@ -89,31 +106,30 @@ public class BddConnection {
         return id;
     }
 
-    //récupère tous les groupes existant (david+rayan)
 
+
+    /**
+     * Récupère tous les groupes existant (david+rayan)
+     * @param listGroup
+     * @return
+     * @throws SQLException
+     */
     public List<Group> giveGroups(List<Group> listGroup) throws SQLException {
         int groupeid;
         String nomGroupe;
-        //String dateCreation;
         Group group;
-        //List<User> roomMembers = new ArrayList<User>();
 
         PreparedStatement stmt = conn.prepareStatement("Select * from Groupes");
-        //PreparedStatement stmt2 = conn.prepareStatement("Select * from ParticipantsGroupe");
 
         try{
             ResultSet r = stmt.executeQuery();
-            //ResultSet r2 = stmt2.executeQuery();
 
-            while(r.next() /*&& r2.next()*/){
+            while(r.next()){
 
                 groupeid = r.getInt("GroupeID");
                 nomGroupe = r.getString("NomGroupe");
-                //dateCreation = r.getString("DateCreation");
-
                 group = new Group(nomGroupe, groupeid);
                 listGroup.add(group);
-
             }
                 conn.commit();
             }
@@ -125,8 +141,13 @@ public class BddConnection {
         return listGroup;
     }
 
-    //Récupère tous les ID utilisateurs d'un groupe (david+rayan)
 
+    /**
+     * Récupère tous les ID utilisateurs d'un groupe
+     * @param groupId
+     * @return
+     * @throws SQLException
+     */
     public List<Integer> giveGroupUsers(int groupId) throws SQLException{
         int participantID;
         List<Integer> groupMembers = new ArrayList<Integer>();
@@ -154,7 +175,12 @@ public class BddConnection {
 
     }
 
-
+    /**
+     *
+     * @param userId
+     * @param groupMembers
+     * @return
+     */
     public boolean verifUserGroup(int userId, List<Integer> groupMembers){
         ListIterator<Integer> it = groupMembers.listIterator();
         while (it.hasNext()){
@@ -166,7 +192,12 @@ public class BddConnection {
         return false;
     }
 
-
+    /**
+     *
+     * @param groupMembers
+     * @return
+     * @throws SQLException
+     */
     public List<String> userIdToPseudo(List<Integer> groupMembers) throws SQLException {
         List<String> listPseudo = new ArrayList<String>();
         String userPseudo;
@@ -195,6 +226,11 @@ public class BddConnection {
         return listPseudo;
     }
 
+    /**
+     *
+     * @return
+     * @throws SQLException
+     */
     public List<String> allPseudoFromBase() throws SQLException{
         List<String> listPseudo = new ArrayList<String>();
         String userPseudo;
@@ -216,6 +252,11 @@ public class BddConnection {
         return listPseudo;
     }
 
+    /**
+     *
+     * @return
+     * @throws SQLException
+     */
     public List<Integer> allIdUserFromBase() throws SQLException{
         List<Integer> listIdUser = new ArrayList<Integer>();
         int userId;
@@ -237,6 +278,12 @@ public class BddConnection {
         return listIdUser;
     }
 
+    /**
+     *
+     * @param idGroup
+     * @param groupName
+     * @throws SQLException
+     */
     public void insertIntoGroupes(int idGroup, String groupName) throws SQLException {
         PreparedStatement  stmt = conn.prepareStatement("Insert Into groupes values(?, ?, sysdate, null)");
         try{
@@ -254,6 +301,12 @@ public class BddConnection {
 
     }
 
+    /**
+     *
+     * @param idGroup
+     * @param listUserIdNewGroup
+     * @throws SQLException
+     */
     public void insertIntoParticipantGroup( int idGroup , List<Integer> listUserIdNewGroup) throws SQLException{
 
         for (Integer integer : listUserIdNewGroup) {
@@ -272,6 +325,11 @@ public class BddConnection {
         }
     }
 
+    /**
+     *
+     * @return
+     * @throws SQLException
+     */
     public int incrementGroupId() throws SQLException {
         int newId = 0;
 
@@ -294,6 +352,11 @@ public class BddConnection {
         return newId;
     }
 
+    /**
+     *
+     * @param groupId
+     * @param messageList
+     */
     public void giveGroupMessages(int groupId, List<Message>messageList) {
 
         int utilisateurID;
@@ -324,7 +387,13 @@ public class BddConnection {
         }
     }
 
-    //Envoie les messages de l'utilisateur pour  le groupe séelectionné
+
+    /**
+     * Envoie les messages de l'utilisateur pour le groupe sélectionné
+     * @param userId
+     * @param groupId
+     * @param messageList
+     */
     public void giveUserMessagesfromGroupSelected(int userId, int groupId, List<Message>messageList) {
 
         String text;
@@ -355,7 +424,12 @@ public class BddConnection {
         }
     }
 
-    //Permet de supprimer le message de l'utilisateur
+
+
+    /**
+     * Permet de supprimer le message de l'utilisateur
+     * @param message
+     */
     public void deleteUserMessage(Message message) {
 
         try {
@@ -377,7 +451,12 @@ public class BddConnection {
         }
     }
 
-
+    /**
+     *
+     * @param userid
+     * @return
+     * @throws SQLException
+     */
     public String givePseudoFromId(int userid) throws SQLException {
 
         String userPseudo = "null";
@@ -401,6 +480,14 @@ public class BddConnection {
         return userPseudo;
     }
 
+    /**
+     *
+     * @param userid
+     * @param selectedGroupId
+     * @param message
+     * @param timeStamp
+     * @throws SQLException
+     */
     public void sendMessageToBDD(int userid, int selectedGroupId, String message, String timeStamp) throws SQLException {
 
         PreparedStatement  stmt = conn.prepareStatement("Insert Into Messages values(?, ?, ?, sysdate)");
@@ -416,9 +503,15 @@ public class BddConnection {
             conn.rollback();
         }
         stmt.close();
-
     }
 
+    /**
+     *
+     * @param userId
+     * @param groupId
+     * @return
+     * @throws SQLException
+     */
     public int getMessageNumberOfUser(int userId, int groupId) throws SQLException {
         int numberOfMessage = 0;
         PreparedStatement stmt = conn.prepareStatement("Select count(*) from Messages where groupeid = ? AND UtilisateurId = ?");
@@ -441,4 +534,3 @@ public class BddConnection {
         return numberOfMessage;
     }
 }
-

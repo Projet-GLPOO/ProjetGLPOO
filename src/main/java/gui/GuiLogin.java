@@ -9,6 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
+
 public class GuiLogin {
     public JFrame frame;
     private JTextField userNameField;
@@ -63,9 +64,6 @@ public class GuiLogin {
             }
         });
         buttonLogin.setBackground(UIManager.getColor("List.dropLineColor"));
-
-
-
         buttonLogin.setBounds(642, 442, 271, 66);
         frame.getContentPane().add(buttonLogin);
 

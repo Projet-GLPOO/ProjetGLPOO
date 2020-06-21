@@ -1,28 +1,21 @@
 package user;
 
-import server.ServerThread;
-import user.Message;
-import user.User;
-
 import javax.swing.*;
 import java.io.*;
 import java.net.*;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
+
 
 public class SimpleClient implements Observer{
 
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 	private Socket socket;
-	private ArrayList<Observer> observers;
 	private JTextArea chatArea;
 	private String ip;
 	private int idGroup;
 
 	/**
-	 *
+	 * Constructeur de SimpleClient qui permet d'initialiser d'initaliser l'input, l'output, le socket et le thread du client,
 	 * @param chatArea
 	 * @param ip
 	 */
@@ -42,7 +35,7 @@ public class SimpleClient implements Observer{
 	}
 
 	/**
-	 *
+	 * Envoie le message au serveur
 	 * @param message
 	 */
 	@Override
@@ -56,6 +49,10 @@ public class SimpleClient implements Observer{
 		}
 	}
 
+	/**
+	 * Permet de recevoir le bon ID de groupe
+	 * @param idGroup
+	 */
 	@Override
 	public void sendIdGroup(int idGroup) {
 		this.idGroup = idGroup;
@@ -63,6 +60,9 @@ public class SimpleClient implements Observer{
 
 
 	Thread t = new Thread() {
+		/**
+	 	* Reçoit les messages du serveur et l'affiche dans le chatArea
+		 */
 		public void run() {
 			try {
 				while(true) {
@@ -71,7 +71,7 @@ public class SimpleClient implements Observer{
 						break;
 					if(idGroup == message.getGroupID()) {
 						chatArea.append(message.getUser().getPseudo() + "#" + message.getUser().getId() + " " + message.getPostDate() + "\n" + message.getMessage() + "\n\n");
-					}//chatArea.append(message.getMessage() + "\n");
+					}
 				}
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();

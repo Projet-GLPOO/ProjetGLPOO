@@ -13,22 +13,22 @@ import java.util.List;
 
 public class Room implements Subject{
 
-    List<User> contact;
-    List<Group> userGroup;
-    DefaultListModel model;
-    BddConnection bddConnection;
-    int idUser;
-    List<Integer>  memberIdGroup;
-    List<String> memberPseudoRoom;
-    List<Integer> memberIdUser;
-    ServerThread serverThread;
-
-    ArrayList<Observer> observers;
-
+    private List<Group> userGroup;
+    private DefaultListModel model;
+    private BddConnection bddConnection;
+    private int idUser;
+    private List<Integer>  memberIdGroup;
+    private List<String> memberPseudoRoom;
+    private List<Integer> memberIdUser;
+    private ArrayList<Observer> observers;
     private List<Message> messageList;
 
+    /**
+     * Constructeur de Room
+     * @param id
+     * @param bddConnection
+     */
     public Room(int id, BddConnection bddConnection ){
-        contact = new ArrayList<User>();
         userGroup = new ArrayList<Group>();
         model = new DefaultListModel();
         this.bddConnection = bddConnection;
@@ -37,14 +37,18 @@ public class Room implements Subject{
         memberPseudoRoom = new ArrayList<String>();
         memberIdUser = new ArrayList<Integer>();
         messageList = new ArrayList<Message>();
-
         observers = new ArrayList<Observer>();
     }
 
-    //listMessage
-    //groupeid
-    //userid
-    //model
+
+    /**
+     * Récupère les messages d'un groupe sélectionné et de les ajouter à messageList 
+     * @param messageList
+     * @param groupId
+     * @param userId
+     * @param modelMessageGroupRoomSelected
+     * @throws SQLException
+     */
     public void getMessageGroup(List<Message> messageList, int groupId, int userId, DefaultListModel modelMessageGroupRoomSelected) throws SQLException {
         int numberOfMessage;
         numberOfMessage = bddConnection.getMessageNumberOfUser(userId, groupId);
@@ -56,8 +60,12 @@ public class Room implements Subject{
     }
 
 
-    //Récupère les groupes de l'utilisateur connecté et les ajoute à une defaultListModel qui sera affiché dans la room
-    public void getDefaultListModel (DefaultListModel model) throws SQLException {
+    /**
+     * Récupère les groupes de l'utilisateur connecté et les ajoute à une defaultListModel qui sera affiché dans la room
+     * @param model
+     * @throws SQLException
+     */
+    public void getListModel(DefaultListModel model) throws SQLException {
         userGroup.clear();
         bddConnection.giveGroups(userGroup);
         model.clear();
@@ -70,7 +78,12 @@ public class Room implements Subject{
         }
     }
 
-    //Récupère tous les membres liés au groupe sélectionné dans la guiRoom
+
+    /**
+     * Récupère tous les membres liés au groupe sélectionné dans la guiRoom
+     * @param listMemberGroup
+     * @param modelParticipantGroup
+     */
     public void getMembersGroup(JList listMemberGroup, DefaultListModel modelParticipantGroup ){
         String tempIdGrp;
         List<Integer> groupUserId; // les id de tout les membres grp
@@ -93,7 +106,11 @@ public class Room implements Subject{
     }
 
 
-    //Permet d'ajouter tous les utilisateurs présents dans la base de données (simplifie la création de groupe)
+    /**
+     * Permet d'ajouter tous les utilisateurs présents dans la base de données (simplifie la création de groupe)
+     * @param usersMemberRoom
+     * @throws SQLException
+     */
     public void addListUserRoom(DefaultListModel usersMemberRoom) throws SQLException {
         memberPseudoRoom = bddConnection.allPseudoFromBase();
         memberIdUser = bddConnection.allIdUserFromBase();
@@ -104,15 +121,17 @@ public class Room implements Subject{
     }
 
 
-    //Permet de créer un groupe
+    /**
+     * Permet de créer un groupe
+     * @param groupName
+     * @param groupMember
+     * @throws SQLException
+     */
     public void createGroup(String groupName , List<String> groupMember ) throws SQLException {
         Connection conn;
         int idGroup;
         List<Integer> listIdMemberNewGroup = new ArrayList<Integer>();
         listIdMemberNewGroup = idFromPseudo(groupMember);
-
-        /*List<String> pseudoMemberNewGroup = new ArrayList<String>();
-        pseudoMemberNewGroup = stringFromPseudo(groupMember);*/
 
         idGroup = bddConnection.incrementGroupId();
 
@@ -121,7 +140,12 @@ public class Room implements Subject{
 
     }
 
-    //Permet de récupérer le tag (id) d'un membre pour par la suite pouvoir l'insérer dans la base de données
+
+    /**
+     * Permet de récupérer le tag (id) d'un membre pour par la suite pouvoir l'insérer dans la base de données
+     * @param groupMember
+     * @return
+     */
     public List<Integer> idFromPseudo ( List<String> groupMember){
         List<Integer> idMemberNewGroup = new ArrayList<Integer>();
         String tempIdMemberGrp;
@@ -133,7 +157,12 @@ public class Room implements Subject{
         return idMemberNewGroup;
     }
 
-    //Permet de récupérer le pseudo d'un membre
+
+    /**
+     * Permet de récupérer le pseudo d'un membre
+     * @param groupMember
+     * @return
+     */
     public List<String> stringFromPseudo( List<String> groupMember ){
         List<String> pseudoMemberNewGroup = new ArrayList<String>();
 
@@ -147,18 +176,23 @@ public class Room implements Subject{
         return pseudoMemberNewGroup;
     }
 
-    //Permet de récupérer les messages du groupe sélectionner dans GuiRoom
+
+    /**
+     * Permet de récupérer les messages du groupe sélectionner dans GuiRoom
+     * @param idGroupe
+     * @param messagesList
+     */
     public void getGroupMessages(int idGroupe, List<Message> messagesList){
 
         bddConnection.giveGroupMessages(idGroupe, messagesList);
     }
 
+
     /**
-     *
+     * Permet de récupérer l'Id du groupe sélectionné dans GuiRoom
      * @param listMemberGroup
      * @return
      */
-    //Permet de récupérer l'Id du groupe sélectioner dans GuiRoom
     public int getIdSelectedGroup(JList listMemberGroup){
         String tempIdGrp;
         tempIdGrp = listMemberGroup.getSelectedValue().toString(); // Récupère le nom du groupe sélectionné
@@ -166,6 +200,7 @@ public class Room implements Subject{
 
         return Integer.parseInt(tempIdGrp);
     }
+
 
     /**
      *
@@ -181,6 +216,7 @@ public class Room implements Subject{
         }
         return null;
     }
+
 
     /**
      *
@@ -199,6 +235,7 @@ public class Room implements Subject{
 
     }
 
+
     /**
      *
      * @param message
@@ -206,16 +243,28 @@ public class Room implements Subject{
     public void sendMessage(Message message) {
         notifyObservers(message);
     }
+
+
+    /**
+     *
+     * @param idGroup
+     */
     public void sendIdGroup(int idGroup) {
         notifyObservers(idGroup);
     }
 
+
+    /**
+     *
+     * @param idGroup
+     */
     private void notifyObservers(int idGroup) {
         System.out.println("notify observers ");
         for (Observer o : observers) {
             o.sendIdGroup(idGroup);
         }
     }
+
 
     /**
      *
@@ -226,6 +275,7 @@ public class Room implements Subject{
         observers.add(o);
     }
 
+
     /**
      *
      * @param o
@@ -234,6 +284,7 @@ public class Room implements Subject{
     public void removeObserver(Observer o) {
 
     }
+
 
     /**
      *
@@ -248,7 +299,12 @@ public class Room implements Subject{
 
     }
 
-    public void deletMessage(Message message) {
+
+    /**
+     *
+     * @param message
+     */
+    public void deleteMessage(Message message) {
         bddConnection.deleteUserMessage(message);
     }
 }

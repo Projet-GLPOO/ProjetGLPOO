@@ -71,11 +71,11 @@ public class Message implements Serializable {
         return postDate;
     }
 
+    /**
+     *
+     * @return
+     */
     public User getUser(){
         return user;
-    }
-
-    public void setMessageWithFormat(String message) {
-        message.trim();
     }
 }

@@ -32,13 +32,12 @@ public class GuiRoom implements ActionListener {
     private JList choiceGroupJList;
     private DefaultListModel modelParticipantGroup = new DefaultListModel();
     private DefaultListModel model;
-    private Observer observer;
     private List<Message>messageList;
     private int messageIndex;
 
 
     /**
-     *
+     * Constructeur de GuiRoom où est défini l'utilisateur, la room et appel la création de l'interface graphique de GuiRoom
      * @param userName
      * @param mdp
      * @param id
@@ -57,7 +56,7 @@ public class GuiRoom implements ActionListener {
     }
 
     /**
-     * Initialize the contents of the frame.
+     * Affiche la fenêtre GuiRoom, initialise tout ce qui est nécessaire à l'utilisateur
      */
     private void initialize() throws SQLException {
         frame = new JFrame();
@@ -68,20 +67,14 @@ public class GuiRoom implements ActionListener {
         chatArea = new JTextArea();
         chatArea.setVisible(false);
         Observer a = new SimpleClient(chatArea,"localhost");
-
         room.registerObserver(a);
-
-
-
-
-
         messageToSendArea = new JTextArea();
         messageToSendArea.setBounds(12, 615, 766, 64);
         JScrollPane scrollMessageToSend = new JScrollPane(messageToSendArea);
         scrollMessageToSend.setBounds(12, 615, 766, 64);
         frame.getContentPane().add(scrollMessageToSend);
 
-        sendMessageButton = new JButton("Envoyer");
+        sendMessageButton = new JButton("Send");
         sendMessageButton.setBounds(824, 620, 110, 25);
         sendMessageButton.setActionCommand("SendAMessage");
         sendMessageButton.addActionListener(this);
@@ -110,19 +103,20 @@ public class GuiRoom implements ActionListener {
         deleteMessageButton.setBounds(824, 580, 110, 25);
         deleteMessageButton.setActionCommand("CreateDeleteMessageFrame");
         deleteMessageButton.addActionListener(this);
-        deleteMessageButton.setEnabled(true);
+        deleteMessageButton.setEnabled(false);
         frame.getContentPane().add(deleteMessageButton);
 
 
         model = new DefaultListModel();
 
         //Affiche les membres appartenant au groupe sélectionner
-        room.getDefaultListModel(model);
+        room.getListModel(model);
         groupList = new JList(model);
 
         MouseListener mouseListener = new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 chatArea.setVisible(true);
+                deleteMessageButton.setEnabled(true);
                 sendMessageButton.setEnabled(true);
                 chatArea.setText("");
                 room.getMembersGroup(groupList,modelParticipantGroup);
@@ -148,9 +142,6 @@ public class GuiRoom implements ActionListener {
         frame.getContentPane().add(scrollChat);
 
 
-
-
-
         nomSalonDeDiscussion = new JTextField();
         nomSalonDeDiscussion.setText("Salon de discussion");
         nomSalonDeDiscussion.setBounds(371, 43, 285, 25);
@@ -158,17 +149,15 @@ public class GuiRoom implements ActionListener {
         nomSalonDeDiscussion.setColumns(10);
         frame.getContentPane().add(nomSalonDeDiscussion);
 
-
         JList membersFromGroupList = new JList(modelParticipantGroup);
         membersFromGroupList.setBounds(815, 15, 150, 500);
         frame.getContentPane().add(membersFromGroupList);
     }
 
     /**
-     *
+     * Ecoute les boutons présent dans l'interface GuiRoom
      * @param e
      */
-
     public void actionPerformed(ActionEvent e) {
 
         switch (e.getActionCommand()) {
@@ -192,6 +181,7 @@ public class GuiRoom implements ActionListener {
 
             case "CreateGroup":
                 try {
+                    //Lance l'interface graphique de la création de groupe
                     createCreationGroupFrame();
                 } catch (SQLException throwable) {
                     throwable.printStackTrace();
@@ -199,17 +189,21 @@ public class GuiRoom implements ActionListener {
                 break;
 
             case "RefreshGroupsList":
+                //Permet d'effacer le contenu de groupList
                 groupList.removeAll();
                 try {
-                    room.getDefaultListModel(model);
+                    //Met à jour le contenu du model
+                    room.getListModel(model);
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
+                //Met à jour groupList grâce au nouveau contenu du model
                 groupList.setModel(model);
                 break;
 
             case "CreateDeleteMessageFrame" :
                 try {
+                    //Lance l'interface graphique de la suppression de message
                     createMessageDeletionFrame();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
@@ -217,50 +211,56 @@ public class GuiRoom implements ActionListener {
                 break;
 
             case "DeleteAMessage":
-                room.deletMessage(messageList.get(messageIndex));
+                //Permet de supprimer un message à partir de son index
+                room.deleteMessage(messageList.get(messageIndex));
+                //Ferme l'interface graphique de suppression de message
                 messageDeletionFrame.dispose();
+                //Affiche dans la zone de texte de la room le message reçu si l'utilisateur courant se trouve dans le bon groupe
                 if(groupList.getSelectedValue().toString().equals(choiceGroupJList.getSelectedValue().toString())){
                     room.getGroupMessages(room.getIdSelectedGroup(groupList), messagesList);
                     chatArea.setText("");
                     showGroupMessages(messagesList);
                 }
-
                 break;
         }
     }
 
     /**
-     *
+     * Permet de créer l'interface graphique de création de groupe et gère son contenu
      * @throws SQLException
      */
     public void createCreationGroupFrame() throws SQLException {
-        JFrame frameGroup = new JFrame();
+        final JFrame frameGroup = new JFrame();
         frameGroup.setBounds(200, 200, 500, 500);
         frameGroup.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frameGroup.getContentPane().setLayout(null);
         frameGroup.setVisible(true);
 
-        final JTextArea chatAreaCreateGroup = new JTextArea();
+        //Creation de la zone de texte dans laquelle, il faut insérer le nom du groupe à créer
+        final JTextArea chatAreaCreateGroup = new JTextArea("Choose a name for your group: ");
         chatAreaCreateGroup.setBounds(1, 175, 500, 100);
         frameGroup.getContentPane().add(chatAreaCreateGroup);
 
-
-
-        DefaultListModel modelusersMembersRoom = new DefaultListModel();
-        room.addListUserRoom(modelusersMembersRoom);
-        final JList usersMemberRoom = new JList(modelusersMembersRoom);
+        //Création du model servant de contenu pour la JList usersMemberRoom
+        DefaultListModel modelUsersMembersRoom = new DefaultListModel();
+        room.addListUserRoom(modelUsersMembersRoom);
+        final JList usersMemberRoom = new JList(modelUsersMembersRoom);
         usersMemberRoom.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         usersMemberRoom.setBounds(0, 0, 175, 150);
         frameGroup.getContentPane().add(usersMemberRoom);
 
+        //Création du model servant de contenu pour la JList copyList
         final DefaultListModel modelcopyList = new DefaultListModel();
-
         JButton Copygroup = new JButton();
         Copygroup = new JButton("Copy");
         Copygroup.setBounds(175, 0, 135, 50);
         Copygroup.setEnabled(true);
         frameGroup.getContentPane().add(Copygroup);
+        final JList<String> copyList = new JList<String>(modelcopyList);
+        copyList.setBounds(310, 0, 175, 150);
+        frameGroup.getContentPane().add(copyList);
 
+        //Fais une copie des utilisateurs selectionnés dans usersMemberRoom afin de créer un nouveau grouoe
         Copygroup.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -273,39 +273,46 @@ public class GuiRoom implements ActionListener {
         });
 
 
-
-
-        final JList<String> copyList = new JList<String>(modelcopyList);
-        copyList.setBounds(310, 0, 175, 150);
-        frameGroup.getContentPane().add(copyList);
-
-
         JButton sendMessageCreateGroupButton = new JButton();
         sendMessageCreateGroupButton = new JButton("Envoyer");
         sendMessageCreateGroupButton.setBounds(1, 300, 100, 50);
         sendMessageCreateGroupButton.setEnabled(true);
         frameGroup.getContentPane().add(sendMessageCreateGroupButton);
 
+        //Permet la création du groupe dans la base de données
         final List<String> groupMember = new ArrayList<String>();
         sendMessageCreateGroupButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String message = chatAreaCreateGroup.getText();
-
                 for(int i =0 ; i < copyList.getModel().getSize(); i++){
                     groupMember.add(copyList.getModel().getElementAt(i));
 
                 }
-
                 try {
-                    room.createGroup(message,groupMember);
+                    if(!message.trim().equals("") && message.length() > 0) {
+                        //Créer le groupe dans la base de donnée
+                        room.createGroup(message, groupMember);
+                        //Indique à l'utilisateur que le groupe a bien été créé
+                        JOptionPane.showMessageDialog(null, "Group created : " + message);
+                        //Ferme la fenêtre de création de groupe
+                        frameGroup.dispose();
+
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Error detected, no group created !");
+                    }
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
             }
         });
-
     }
+
+    /**
+     * Lance l'interface graphique permettant de choisir parmi les messages postés pour les supprimer
+     * @throws SQLException
+     */
     public void createMessageDeletionFrame() throws SQLException {
         messageDeletionFrame = new JFrame();
 
@@ -316,7 +323,7 @@ public class GuiRoom implements ActionListener {
 
 
         DefaultListModel modelGroupRoom = new DefaultListModel();
-        room.getDefaultListModel(modelGroupRoom);
+        room.getListModel(modelGroupRoom);
         choiceGroupJList = new JList(modelGroupRoom);
         JScrollPane choiceGroupJListJSchrollPane = new JScrollPane(choiceGroupJList);
         choiceGroupJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -369,7 +376,7 @@ public class GuiRoom implements ActionListener {
 
 
     /**
-     *
+     * Permet d'afficher les messages correpondant au groupe sélectionné
      * @param messageList
      */
     public void showGroupMessages(List<Message> messageList){

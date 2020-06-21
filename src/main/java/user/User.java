@@ -1,7 +1,7 @@
 package user;
 
 import java.io.Serializable;
-import java.util.List;
+
 
 public class User implements Serializable {
     private String pseudo;
@@ -20,33 +20,14 @@ public class User implements Serializable {
     }
 
 
-
-    /**
-     *
-     * @param groups
-     * @param newGroup
-     */
-    public void addGroup(List<Group>  groups, Group newGroup) {
-        groups.add(newGroup);
-    }
-
-    /**
-     *
-     * @param groups
-     * @param oldGroup
-     */
-    public void removeGroup(List<Group>  groups, Group oldGroup) {
-        groups.remove(oldGroup);
-    }
-
     /**
      *
      * @return
      */
-
     public String getPseudo() {
         return pseudo;
     }
+
 
     /**
      *
@@ -56,6 +37,7 @@ public class User implements Serializable {
         this.pseudo = pseudo;
     }
 
+
     /**
      *
      * @return
@@ -64,13 +46,6 @@ public class User implements Serializable {
         return mdp;
     }
 
-    /**
-     *
-     * @param mdp
-     */
-    public void setMdp(String mdp) {
-        this.mdp = mdp;
-    }
 
     /**
      *
@@ -79,6 +54,7 @@ public class User implements Serializable {
     public int getId() {
         return id;
     }
+
 
     /**
      *

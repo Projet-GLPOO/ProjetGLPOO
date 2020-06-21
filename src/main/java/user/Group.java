@@ -1,15 +1,13 @@
 package user;
 
 import java.util.List;
-import java.util.UUID;
+
 
 public class Group {
 
     private List<User> memberGroup;
     private int idGroup;
     private String nomGroupe;
-    private String dateCreation;
-
 
 
     /**
@@ -17,8 +15,6 @@ public class Group {
      * @param nomGroupe
      * @param idGroup
      */
-
-
     public Group(String nomGroupe , int idGroup ) {
         this.nomGroupe = nomGroupe;
         this.idGroup = idGroup;
@@ -26,24 +22,16 @@ public class Group {
 
     /**
      *
-     * @return
+     * @return memberGroup
      */
     public List<User> getMemberGroup() {
         return memberGroup;
     }
 
-    /**
-     *
-     * @param memberGroup
-     */
-
-    public void setMemberGroup(List<User> memberGroup) {
-        this.memberGroup = memberGroup;
-    }
 
     /**
      *
-     * @return
+     * @return idGroup
      */
     public int getIdGroup() {
         return idGroup;
@@ -51,19 +39,9 @@ public class Group {
 
     /**
      *
-     * @param idGroup
-     */
-
-    public void setIdGroup(int idGroup) {
-        this.idGroup = idGroup;
-    }
-
-    /**
-     *
-     * @return
+     * @return nomGroupe
      */
     public String getNomGroupe() {
         return nomGroupe;
     }
-
 }
