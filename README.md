@@ -1,28 +1,28 @@
 # ProjetGLPOO
 
-##AUTHORS:
+## AUTHORS:
 	-Rayan Kanawati
 	-Paul Michaux
 	-Alexandre Piga
 	-David Touitou
 	-David Xia
 
-##Lien GitHub
+## Lien GitHub
 
 https://github.com/Projet-GLPOO/ProjetGLPOO
 
-##Lien Trello
+## Lien Trello
 
 https://trello.com/b/0Oz8VOIx/projet-glpoo
 
-##Description
+## Description
 
 Ce projet consistait en la réalisation d'une "chatroom" permettant un échange écrit entre plusieurs participants. 
 Cette application met en place une base de donnée (via le logiciel H2), un serveur et des clients (le tout local).
 Elle met en également en place des interfaces graphiques permettant une navigation plus intuitive.
 
 
-##Comment fonctionne-t-elle ?
+## Comment fonctionne-t-elle ?
 
 Tout d'abord, il vous faudra lancé la base de donnée H2 après avoir mis le fichier au bon endroit (C:\Users\"nom d'utilisateur"\"le fichier.mv.db"). 
 L'utilisateur est "sa" et le mot de passe est "glpoo".
@@ -34,7 +34,7 @@ Vous pouvez également supprimer les messages que vous avez envoyé via le bouto
 
 Pour connecter plusieurs clients, il vous suffit de rentrer différents username/mot de passe sur l'interface de connexion qui ne se ferme pas automatiquement.
 
-##Problèmes et bugs connus
+## Problèmes et bugs connus
 
 	-Faire attention à mettre son fichier "h2-1.4.200.jar" (ressemble à ça et ce trouve dans votre dossier d'installation d'H2 "C:\Program FIles (x86)\H2\bin\h2-1.4.200.jar").
 		Dans l'IDE Intelij : file -> Project structure -> Librarie et remplacer ou ajouter le fichier .jar
