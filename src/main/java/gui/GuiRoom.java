@@ -1,7 +1,6 @@
 package gui;
 
 import bdd.BddConnection;
-import server.ServerThread;
 import user.*;
 
 import javax.swing.*;
@@ -20,8 +19,9 @@ public class GuiRoom implements ActionListener {
     private JTextArea messageToSendArea;
 
     private JButton sendMessageButton;
-    private JButton createGroup;
+    private JButton createGroupButton;
     private JButton refreshButton;
+    private JButton deleteMessageButton;
     private Room room;
     private User user;
     private List<Message> messagesList;
@@ -93,12 +93,20 @@ public class GuiRoom implements ActionListener {
 
 
 
-        createGroup = new JButton("New Group");
-        createGroup.setBounds(824, 660, 110, 25);
-        createGroup.setActionCommand("CreateGroup");
-        createGroup.addActionListener(this);
-        createGroup.setEnabled(true);
-        frame.getContentPane().add(createGroup);
+        createGroupButton = new JButton("New Group");
+        createGroupButton.setBounds(824, 660, 110, 25);
+        createGroupButton.setActionCommand("CreateGroup");
+        createGroupButton.addActionListener(this);
+        createGroupButton.setEnabled(true);
+        frame.getContentPane().add(createGroupButton);
+
+
+        deleteMessageButton = new JButton("Delete Message");
+        deleteMessageButton.setBounds(824, 580, 110, 25);
+        deleteMessageButton.setActionCommand("DeleteMessage");
+        deleteMessageButton.addActionListener(this);
+        deleteMessageButton.setEnabled(true);
+        frame.getContentPane().add(deleteMessageButton);
 
 
         model = new DefaultListModel();
@@ -194,6 +202,10 @@ public class GuiRoom implements ActionListener {
                 }
                 groupList.setModel(model);
                 break;
+
+            case "DeleteMessage" :
+                createMessagedeletionFrame();
+                break;
         }
     }
 
@@ -273,6 +285,18 @@ public class GuiRoom implements ActionListener {
             }
         });
 
+    }
+    public void createMessagedeletionFrame(){
+        JFrame messageDeletionFrame = new JFrame();
+
+        messageDeletionFrame.setBounds(200, 200, 500, 500);
+        messageDeletionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        messageDeletionFrame.getContentPane().setLayout(null);
+        messageDeletionFrame.setVisible(true);
+
+        final JTextArea chatAreaDeleteMessage = new JTextArea();
+        chatAreaDeleteMessage.setBounds(1, 175, 500, 100);
+        messageDeletionFrame.getContentPane().add(chatAreaDeleteMessage);
     }
 
 
