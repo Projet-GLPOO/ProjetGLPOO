@@ -24,7 +24,7 @@ Elle met en également en place des interfaces graphiques permettant une navigat
 
 ## Comment fonctionne-t-elle ?
 
-Tout d'abord, il vous faudra lancé la base de donnée H2 après avoir mis le fichier au bon endroit (C:\Users\"nom d'utilisateur"\"le fichier.mv.db"). 
+Tout d'abord, il vous faudra lancé la base de donnée H2 après avoir mis le fichier au bon endroit (C:\\Users\\"nom d'utilisateur"\\"le fichier.mv.db"). 
 L'utilisateur est "sa" et le mot de passe est "glpoo".
 
 Quand vous lancez l'application, vous arrivez sur une interface vous demandant un nom d'utilisateur et un mot de passe (username: Guest /// mot de passe: glpoo).
