@@ -14,6 +14,8 @@ import java.util.List;
 public class GuiRoom implements ActionListener {
 
     private JFrame frame;
+    private JFrame messageDeletionFrame;
+
     private JTextField nomSalonDeDiscussion;
     private JTextArea chatArea;
     private JTextArea messageToSendArea;
@@ -215,6 +217,7 @@ public class GuiRoom implements ActionListener {
 
             case "DeleteAMessage":
                 room.deletMessage(messageList.get(messageIndex));
+                messageDeletionFrame.dispose();
 
                 break;
         }
@@ -298,7 +301,7 @@ public class GuiRoom implements ActionListener {
 
     }
     public void createMessageDeletionFrame() throws SQLException {
-        final JFrame messageDeletionFrame = new JFrame();
+        messageDeletionFrame = new JFrame();
 
         messageDeletionFrame.setBounds(200, 200, 650, 500);
         messageDeletionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -350,7 +353,6 @@ public class GuiRoom implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 deleteMessageButton.setEnabled(true);
                 messageIndex = choiceMessageGroupJList.getSelectedIndex();
-
             }
         };
         choiceMessageGroupJList.addMouseListener(mouseListenerMessage);

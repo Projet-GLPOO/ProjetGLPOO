@@ -154,7 +154,6 @@ public class BddConnection {
 
     }
 
-    /*TODO une fonction booleen qui prend en entré le user ID et la liste ID utilisateur précédente pour vérifier si l'utilisateur appartient au groupe (renvoie true si oui)*/
 
     public boolean verifUserGroup(int userId, List<Integer> groupMembers){
         ListIterator<Integer> it = groupMembers.listIterator();
@@ -167,8 +166,6 @@ public class BddConnection {
         return false;
     }
 
-
-    //TODO une fonction qui prend en entré groupmembers(list INT) et qui renvoie les pseudo associés (pour affichage plus tard) (list String)
 
     public List<String> userIdToPseudo(List<Integer> groupMembers) throws SQLException {
         List<String> listPseudo = new ArrayList<String>();
@@ -335,7 +332,7 @@ public class BddConnection {
         Message message;
         try {
             messageList.clear();
-            PreparedStatement stmt = conn.prepareStatement("Select * from Messages WHERE Groupeid = ? AND utilisateurId = ?");
+            PreparedStatement stmt = conn.prepareStatement("Select * from Messages WHERE Groupeid = ? AND utilisateurId = ? order by dateposte desc");
             try {
                 stmt.setInt(1, groupId);
                 stmt.setInt(2, userId);
