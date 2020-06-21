@@ -175,23 +175,22 @@ public class BddConnection {
         String userPseudo;
 
 
-        for(int i = 0;i <groupMembers.size() ;i++){
+        for (Integer groupMember : groupMembers) {
 
             PreparedStatement stmt = conn.prepareStatement("Select * from Utilisateurs where UtilisateurId = ?");
-            try{
+            try {
 
-                stmt.setInt(1, groupMembers.get(i));
+                stmt.setInt(1, groupMember);
 
                 ResultSet r = stmt.executeQuery();
-                while(r.next()) {
+                while (r.next()) {
                     userPseudo = r.getString("Pseudonyme");
                     listPseudo.add(userPseudo);
                 }
 
 
                 conn.commit();
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 conn.rollback();
             }
             stmt.close();
@@ -242,7 +241,6 @@ public class BddConnection {
     }
 
     public void insertIntoGroupes(int idGroup, String groupName) throws SQLException {
-      //TODO finir inserer dans groupes
         PreparedStatement  stmt = conn.prepareStatement("Insert Into groupes values(?, ?, sysdate, null)");
         try{
 
@@ -260,13 +258,12 @@ public class BddConnection {
     }
 
     public void insertIntoParticipantGroup( int idGroup , List<Integer> listUserIdNewGroup) throws SQLException{
-    //Todo
-        //System.out.println(listUserIdNewGroup.size());
-        for (int i =0; i < listUserIdNewGroup.size(); i++) {
-            System.out.println(listUserIdNewGroup.get(i));
+
+        for (Integer integer : listUserIdNewGroup) {
+            System.out.println(integer);
             PreparedStatement stmt = conn.prepareStatement("Insert Into PARTICIPANTSGROUPE values(?, ?)");
             try {
-                stmt.setInt(1, listUserIdNewGroup.get(i));
+                stmt.setInt(1, integer);
                 stmt.setInt(2, idGroup);
                 stmt.executeUpdate();
 
@@ -362,16 +359,16 @@ public class BddConnection {
     }
 
     //Permet de supprimer le message de l'utilisateur
-    public void deleteUserMessages(Message message) {
+    public void deleteUserMessage(Message message) {
 
         try {
-            PreparedStatement stmt = conn.prepareStatement("DELETE FROM Messages WHERE (utilisateurId = ? AND groupeid = ? AND message = ? AND dateposte = ?");
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM Messages WHERE (utilisateurId = ? AND groupeid = ? AND message = ? AND dateposte = ?)");
             try {
                 stmt.setInt(1, message.getUserID());
                 stmt.setInt(2, message.getGroupID());
                 stmt.setString(3, message.getMessage());
                 stmt.setString(4, message.getPostDate());
-                ResultSet r = stmt.executeQuery();
+                int r = stmt.executeUpdate();
 
                 conn.commit();
             } catch (Exception e) {

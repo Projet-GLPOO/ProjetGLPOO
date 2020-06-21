@@ -30,6 +30,8 @@ public class GuiRoom implements ActionListener {
     private DefaultListModel modelParticipantGroup = new DefaultListModel();
     private DefaultListModel model;
     private Observer observer;
+    private List<Message>messageList;
+    private int messageIndex;
 
 
     /**
@@ -103,7 +105,7 @@ public class GuiRoom implements ActionListener {
 
         deleteMessageButton = new JButton("Delete Message");
         deleteMessageButton.setBounds(824, 580, 110, 25);
-        deleteMessageButton.setActionCommand("DeleteMessage");
+        deleteMessageButton.setActionCommand("CreateDeleteMessageFrame");
         deleteMessageButton.addActionListener(this);
         deleteMessageButton.setEnabled(true);
         frame.getContentPane().add(deleteMessageButton);
@@ -188,8 +190,8 @@ public class GuiRoom implements ActionListener {
             case "CreateGroup":
                 try {
                     createCreationGroupFrame();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                } catch (SQLException throwable) {
+                    throwable.printStackTrace();
                 }
                 break;
 
@@ -203,12 +205,17 @@ public class GuiRoom implements ActionListener {
                 groupList.setModel(model);
                 break;
 
-            case "DeleteMessage" :
+            case "CreateDeleteMessageFrame" :
                 try {
                     createMessageDeletionFrame();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
+                break;
+
+            case "DeleteAMessage":
+                room.deletMessage(messageList.get(messageIndex));
+
                 break;
         }
     }
@@ -307,7 +314,7 @@ public class GuiRoom implements ActionListener {
         choiceGroupJListJSchrollPane.setBounds(225, 0, 175, 150);
         messageDeletionFrame.getContentPane().add(choiceGroupJListJSchrollPane);
 
-        final List<Message>messageList = new ArrayList<Message>();
+        messageList = new ArrayList<Message>();
         final DefaultListModel modelMessageGroupRoomSelected =  new DefaultListModel();
         final JList choiceMessageGroupJList = new JList(modelMessageGroupRoomSelected);
         final JScrollPane choiceMessageGroupJListJSchrollPane = new JScrollPane(choiceMessageGroupJList);
@@ -315,9 +322,14 @@ public class GuiRoom implements ActionListener {
         choiceMessageGroupJListJSchrollPane.setBounds(0, 175, 640, 100);
         messageDeletionFrame.getContentPane().add(choiceMessageGroupJListJSchrollPane);
 
+        final JButton deleteMessageButton = new JButton("Delete");
+        deleteMessageButton.setBounds(400, 300, 200, 20);
+        deleteMessageButton.setActionCommand("DeleteAMessage");
+        deleteMessageButton.addActionListener(this);
+        deleteMessageButton.setEnabled(false);
+        messageDeletionFrame.getContentPane().add(deleteMessageButton);
 
-
-        MouseListener mouseListener = new MouseAdapter() {
+        MouseListener mouseListenerGroup = new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 modelMessageGroupRoomSelected.clear();
                 String tempIdGrp;
@@ -332,7 +344,19 @@ public class GuiRoom implements ActionListener {
 
             }
         };
-        choiceGroupJList.addMouseListener(mouseListener);
+        choiceGroupJList.addMouseListener(mouseListenerGroup);
+
+        MouseListener mouseListenerMessage = new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                deleteMessageButton.setEnabled(true);
+                messageIndex = choiceMessageGroupJList.getSelectedIndex();
+
+            }
+        };
+        choiceMessageGroupJList.addMouseListener(mouseListenerMessage);
+
+
+
     }
 
 
@@ -344,9 +368,9 @@ public class GuiRoom implements ActionListener {
 
         Message message;
 
-        for(int i = 0; i < messageList.size(); i++){
-            message = messageList.get(i);
-            chatArea.append(room.idToPseudo(message.getUserID()) + "#" + message.getUserID() + " " + message.getPostDate().substring(0, message.getPostDate().length()-4) + "\n" + message.getMessage() + "\n\n");
+        for (Message value : messageList) {
+            message = value;
+            chatArea.append(room.idToPseudo(message.getUserID()) + "#" + message.getUserID() + " " + message.getPostDate().substring(0, message.getPostDate().length() - 4) + "\n" + message.getMessage() + "\n\n");
         }
     }
 }

@@ -247,4 +247,8 @@ public class Room implements Subject{
         }
 
     }
+
+    public void deletMessage(Message message) {
+        bddConnection.deleteUserMessage(message);
+    }
 }
