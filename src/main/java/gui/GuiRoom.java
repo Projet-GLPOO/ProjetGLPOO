@@ -29,6 +29,7 @@ public class GuiRoom implements ActionListener {
     private List<Message> messagesList;
     private BddConnection bddConnection;
     private JList groupList;
+    private JList choiceGroupJList;
     private DefaultListModel modelParticipantGroup = new DefaultListModel();
     private DefaultListModel model;
     private Observer observer;
@@ -218,6 +219,11 @@ public class GuiRoom implements ActionListener {
             case "DeleteAMessage":
                 room.deletMessage(messageList.get(messageIndex));
                 messageDeletionFrame.dispose();
+                if(groupList.getSelectedValue().toString().equals(choiceGroupJList.getSelectedValue().toString())){
+                    room.getGroupMessages(room.getIdSelectedGroup(groupList), messagesList);
+                    chatArea.setText("");
+                    showGroupMessages(messagesList);
+                }
 
                 break;
         }
@@ -311,7 +317,7 @@ public class GuiRoom implements ActionListener {
 
         DefaultListModel modelGroupRoom = new DefaultListModel();
         room.getDefaultListModel(modelGroupRoom);
-        final JList choiceGroupJList = new JList(modelGroupRoom);
+        choiceGroupJList = new JList(modelGroupRoom);
         JScrollPane choiceGroupJListJSchrollPane = new JScrollPane(choiceGroupJList);
         choiceGroupJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         choiceGroupJListJSchrollPane.setBounds(225, 0, 175, 150);
