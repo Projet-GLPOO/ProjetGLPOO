@@ -1,12 +1,11 @@
 package server;
 
-import javax.swing.*;
 
 public abstract class AbstractServer
 {
 	/**
 	 *
-	 * @param ip
+	 * @param ip Ip de l'utilisateur
 	 */
 	public abstract void connect(String ip);
 }

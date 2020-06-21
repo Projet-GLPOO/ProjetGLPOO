@@ -1,9 +1,6 @@
 package server;
 
 import user.Message;
-import user.User;
-
-import javax.swing.*;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -21,7 +18,10 @@ public class ServerThread extends Thread {
 
 	/**
 	 *
-	 * @param socket
+	 * 	Constructeur de ServerThread
+	 *
+	 * @param socket le socket du serveur
+	 * @param clientConnectionList La liste des clients connecter
 	 */
     public ServerThread(Socket socket, List<ServerThread> clientConnectionList) {
     	this.clientConnectionList = clientConnectionList;
@@ -35,6 +35,10 @@ public class ServerThread extends Thread {
 			e.printStackTrace();
 		}
     }
+
+	/**
+	 * Permet de recevoir le message d'un client puis de l'envoyer à tout les clients
+	 */
 	public void run() {
 		Message message;
     	while(true) {

@@ -11,9 +11,9 @@ public class Group {
 
 
     /**
-     *
-     * @param nomGroupe
-     * @param idGroup
+     * Constructeur de Group
+     * @param nomGroupe Le nom du groupe
+     * @param idGroup L'id du groupe
      */
     public Group(String nomGroupe , int idGroup ) {
         this.nomGroupe = nomGroupe;

@@ -1,13 +1,12 @@
 package server;
 
-import java.io.*;
-import java.net.*; 
+
 
 public class ServerConnection
 {
 	/**
-	 *
-	 * @param args
+	 * Lance le serveur
+	 * @param args Argument du lancement du main du serveur
 	 */
 	public static void main (String[] args) {
 		AbstractServer as = new FirstServer();

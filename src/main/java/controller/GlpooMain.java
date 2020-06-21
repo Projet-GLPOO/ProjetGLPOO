@@ -1,17 +1,13 @@
 package controller;
 
-import bdd.BddConnection;
-import gui.GuiLogin;
-import gui.GuiRoom;
-import user.User;
 
-import java.sql.SQLException;
+import gui.GuiLogin;
 
 public class GlpooMain {
 
     /**
-     *
-     * @param args
+     * Lance le GuiLogin
+     * @param args Argument du lancement du main du client
      */
     public static void main(String[] args){
 

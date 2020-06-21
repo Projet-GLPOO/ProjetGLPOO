@@ -38,11 +38,11 @@ public class GuiRoom implements ActionListener {
 
     /**
      * Constructeur de GuiRoom où est défini l'utilisateur, la room et appel la création de l'interface graphique de GuiRoom
-     * @param userName
-     * @param mdp
-     * @param id
-     * @param bddConnection
-     * @throws SQLException
+     * @param userName Le pseudo de l'utilisateur
+     * @param mdp Le mot de passe de l'utilisateur
+     * @param id L'id de l'utilisateur
+     * @param bddConnection La connection à la bdd
+     * @throws SQLException erreur sql
      */
     public GuiRoom(String userName, String mdp, int id, BddConnection bddConnection) throws SQLException {
         user = new User(userName, mdp);
@@ -143,7 +143,7 @@ public class GuiRoom implements ActionListener {
 
 
         nomSalonDeDiscussion = new JTextField();
-        nomSalonDeDiscussion.setText("Salon de discussion");
+        nomSalonDeDiscussion.setText("Chat Room");
         nomSalonDeDiscussion.setBounds(371, 43, 285, 25);
         nomSalonDeDiscussion.setEditable(false);
         nomSalonDeDiscussion.setColumns(10);
@@ -156,7 +156,7 @@ public class GuiRoom implements ActionListener {
 
     /**
      * Ecoute les boutons présent dans l'interface GuiRoom
-     * @param e
+     * @param e action event
      */
     public void actionPerformed(ActionEvent e) {
 
@@ -190,6 +190,7 @@ public class GuiRoom implements ActionListener {
 
             case "RefreshGroupsList":
                 //Permet d'effacer le contenu de groupList
+                sendMessageButton.setEnabled(false);
                 groupList.removeAll();
                 try {
                     //Met à jour le contenu du model
@@ -227,7 +228,7 @@ public class GuiRoom implements ActionListener {
 
     /**
      * Permet de créer l'interface graphique de création de groupe et gère son contenu
-     * @throws SQLException
+     * @throws SQLException sql erreur
      */
     public void createCreationGroupFrame() throws SQLException {
         final JFrame frameGroup = new JFrame();
@@ -274,7 +275,7 @@ public class GuiRoom implements ActionListener {
 
 
         JButton sendMessageCreateGroupButton = new JButton();
-        sendMessageCreateGroupButton = new JButton("Envoyer");
+        sendMessageCreateGroupButton = new JButton("Send");
         sendMessageCreateGroupButton.setBounds(1, 300, 100, 50);
         sendMessageCreateGroupButton.setEnabled(true);
         frameGroup.getContentPane().add(sendMessageCreateGroupButton);
@@ -311,7 +312,7 @@ public class GuiRoom implements ActionListener {
 
     /**
      * Lance l'interface graphique permettant de choisir parmi les messages postés pour les supprimer
-     * @throws SQLException
+     * @throws SQLException erreur sql
      */
     public void createMessageDeletionFrame() throws SQLException {
         messageDeletionFrame = new JFrame();
@@ -377,7 +378,7 @@ public class GuiRoom implements ActionListener {
 
     /**
      * Permet d'afficher les messages correpondant au groupe sélectionné
-     * @param messageList
+     * @param messageList Liste de message
      */
     public void showGroupMessages(List<Message> messageList){
 

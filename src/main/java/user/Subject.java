@@ -3,19 +3,13 @@ package user;
 public interface Subject {
     /**
      *
-     * @param o
+     * @param o Observer
      */
     void registerObserver(Observer o);
 
     /**
      *
-     * @param o
-     */
-    void removeObserver(Observer o);
-
-    /**
-     *
-     * @param message
+     * @param message Message
      */
     void notifyObservers(Message message);
 

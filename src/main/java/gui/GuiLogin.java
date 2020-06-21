@@ -1,8 +1,6 @@
 package gui;
 
 import bdd.BddConnection;
-import user.User;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -17,11 +15,16 @@ public class GuiLogin {
     private JPasswordField passwordField;
     private BddConnection bddConnection;
 
-
+    /**
+     * Constructeur de GuiLOgin
+     */
     public GuiLogin() {
         initialize();
     }
 
+    /**
+     * Affiche la fenêtre GuiLogin, initialise tout ce qui est nécessaire à l'utilisateur pour se connecter
+     */
     public void initialize() {
 
         frame = new JFrame();
@@ -47,8 +50,14 @@ public class GuiLogin {
         panel.add(lblNewLabel_1);
 
         final Button buttonLogin = new Button("Login");
-
+        /**
+         * Détecte le clique de l'utilisateur sur le bouton envoyé,
+         */
         buttonLogin.addMouseListener(new MouseAdapter() {
+            /**
+             *  Lance GuiRoom si le mot de passe et le pseudo est juste
+             * @param arg0
+             */
             @Override
             public void mouseClicked(MouseEvent arg0) {
                 if(bddConnection.loginConnection(userNameField.getText(), String.valueOf(passwordField.getPassword())) && arg0.getSource()==buttonLogin) {

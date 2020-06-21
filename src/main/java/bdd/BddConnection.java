@@ -1,9 +1,6 @@
 package bdd;
 import user.Group;
 import user.Message;
-import user.User;
-
-import java.awt.print.PrinterAbortException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +12,8 @@ public class BddConnection {
     private Connection conn;
 
     /**
-     *
-     * @throws SQLException
+     * Lance la connection à la BDD
+     * @throws SQLException sql erreur
      */
     public void launchBddConnection() throws SQLException {
 
@@ -31,7 +28,7 @@ public class BddConnection {
     }
 
     /**
-     *
+     * Ferme la connection à la BDD
      */
     public void closeBddConnection(){
         if(conn !=null) {
@@ -44,10 +41,10 @@ public class BddConnection {
     }
 
     /**
-     *
-     * @param userName
-     * @param password
-     * @return
+     * Vérifie si le pseudo et le mot de passe correspondent à ceux entrés dans la base de données
+     * @param userName Le nom de l'utilisateur
+     * @param password Le mot de passe de l'utilisateur
+     * @return true/false
      */
     public boolean loginConnection(String userName, String password){
 
@@ -79,9 +76,9 @@ public class BddConnection {
 
 
     /**
-     *
-     * @param pseudo
-     * @return
+     * Rétourne L'id du pseudo correspondant
+     * @param pseudo Le pseudo de l'utilisateur
+     * @return id
      */
     public int giveId(String pseudo) {
         int id = 0;
@@ -109,9 +106,9 @@ public class BddConnection {
 
 
     /**
-     * Récupère tous les groupes existant (david+rayan)
-     * @param listGroup
-     * @return
+     * Récupère tous les groupes existant
+     * @param listGroup La liste des groupes
+     * @return listGroup
      * @throws SQLException
      */
     public List<Group> giveGroups(List<Group> listGroup) throws SQLException {
@@ -144,9 +141,9 @@ public class BddConnection {
 
     /**
      * Récupère tous les ID utilisateurs d'un groupe
-     * @param groupId
-     * @return
-     * @throws SQLException
+     * @param groupId L'id du groupe
+     * @return groupMembers
+     * @throws SQLException erreur sql
      */
     public List<Integer> giveGroupUsers(int groupId) throws SQLException{
         int participantID;
@@ -176,10 +173,10 @@ public class BddConnection {
     }
 
     /**
-     *
-     * @param userId
-     * @param groupMembers
-     * @return
+     * Vérifie si un utilisateur appartient à un groupe
+     * @param userId L'id de l'utilisateur
+     * @param groupMembers Les id membres du groupes
+     * @return true/false
      */
     public boolean verifUserGroup(int userId, List<Integer> groupMembers){
         ListIterator<Integer> it = groupMembers.listIterator();
@@ -193,10 +190,10 @@ public class BddConnection {
     }
 
     /**
-     *
-     * @param groupMembers
-     * @return
-     * @throws SQLException
+     * Retoune une liste de pseudo à partir d'une liste d'id
+     * @param groupMembers La liste des id des membres du groupe
+     * @return listPseudo
+     * @throws SQLException erreur sql
      */
     public List<String> userIdToPseudo(List<Integer> groupMembers) throws SQLException {
         List<String> listPseudo = new ArrayList<String>();
@@ -227,9 +224,9 @@ public class BddConnection {
     }
 
     /**
-     *
-     * @return
-     * @throws SQLException
+     * Rétoune tous les pseudo de la Base de données
+     * @return listPseudo
+     * @throws SQLException erreur sql
      */
     public List<String> allPseudoFromBase() throws SQLException{
         List<String> listPseudo = new ArrayList<String>();
@@ -253,9 +250,9 @@ public class BddConnection {
     }
 
     /**
-     *
-     * @return
-     * @throws SQLException
+     * Rétoune tous les id de la base de données
+     * @return listIdUser
+     * @throws SQLException erreur sql
      */
     public List<Integer> allIdUserFromBase() throws SQLException{
         List<Integer> listIdUser = new ArrayList<Integer>();
@@ -279,10 +276,10 @@ public class BddConnection {
     }
 
     /**
-     *
-     * @param idGroup
-     * @param groupName
-     * @throws SQLException
+     * Insert dans la base de données le nouveau groupe
+     * @param idGroup L'id du groupe
+     * @param groupName Le nom du groupe
+     * @throws SQLException erreur sql
      */
     public void insertIntoGroupes(int idGroup, String groupName) throws SQLException {
         PreparedStatement  stmt = conn.prepareStatement("Insert Into groupes values(?, ?, sysdate, null)");
@@ -302,10 +299,10 @@ public class BddConnection {
     }
 
     /**
-     *
-     * @param idGroup
-     * @param listUserIdNewGroup
-     * @throws SQLException
+     * Insert dans la base de données les participants d'un groupe
+     * @param idGroup l'id du groupe
+     * @param listUserIdNewGroup La liste des id des membre du groupe
+     * @throws SQLException erreur sql
      */
     public void insertIntoParticipantGroup( int idGroup , List<Integer> listUserIdNewGroup) throws SQLException{
 
@@ -326,9 +323,9 @@ public class BddConnection {
     }
 
     /**
-     *
-     * @return
-     * @throws SQLException
+     * Récupère l'id d'un nouveau groupe
+     * @return newId
+     * @throws SQLException erreur sql
      */
     public int incrementGroupId() throws SQLException {
         int newId = 0;
@@ -353,9 +350,9 @@ public class BddConnection {
     }
 
     /**
-     *
-     * @param groupId
-     * @param messageList
+     * Récupère tout les message de la base de données appartenant à un groupe et l'ajoute à la liste messageList
+     * @param groupId L'id du groupe
+     * @param messageList Liste des messages de la base de données
      */
     public void giveGroupMessages(int groupId, List<Message>messageList) {
 
@@ -390,9 +387,9 @@ public class BddConnection {
 
     /**
      * Envoie les messages de l'utilisateur pour le groupe sélectionné
-     * @param userId
-     * @param groupId
-     * @param messageList
+     * @param userId L'id de l'utilisateur
+     * @param groupId L'id du groupe
+     * @param messageList La liste des messages de l'utilisateur dans un groupe
      */
     public void giveUserMessagesfromGroupSelected(int userId, int groupId, List<Message>messageList) {
 
@@ -428,7 +425,7 @@ public class BddConnection {
 
     /**
      * Permet de supprimer le message de l'utilisateur
-     * @param message
+     * @param message Le message
      */
     public void deleteUserMessage(Message message) {
 
@@ -452,10 +449,10 @@ public class BddConnection {
     }
 
     /**
-     *
-     * @param userid
-     * @return
-     * @throws SQLException
+     * Retoune le pseudo à partir d'un id
+     * @param userid L'id de l'utilisateur
+     * @return userPseudo
+     * @throws SQLException erreur sql
      */
     public String givePseudoFromId(int userid) throws SQLException {
 
@@ -481,12 +478,12 @@ public class BddConnection {
     }
 
     /**
-     *
-     * @param userid
-     * @param selectedGroupId
-     * @param message
-     * @param timeStamp
-     * @throws SQLException
+     * Insert dans la base de données les message écrits par les utilisateurs
+     * @param userid L'id de l'utilisateur
+     * @param selectedGroupId L'id du groupe sélectionner
+     * @param message Le message (textuel)
+     * @param timeStamp La date de l'envoie du message
+     * @throws SQLException erreur sql
      */
     public void sendMessageToBDD(int userid, int selectedGroupId, String message, String timeStamp) throws SQLException {
 
@@ -506,11 +503,11 @@ public class BddConnection {
     }
 
     /**
-     *
-     * @param userId
-     * @param groupId
-     * @return
-     * @throws SQLException
+     * Retourne le nombre de message écrit par l'utilisateur dans un groupe
+     * @param userId L'id de l'utilisateur
+     * @param groupId L'id du groupe
+     * @return numberOfMessage
+     * @throws SQLException erreur sql
      */
     public int getMessageNumberOfUser(int userId, int groupId) throws SQLException {
         int numberOfMessage = 0;

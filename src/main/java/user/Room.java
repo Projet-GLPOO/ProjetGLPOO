@@ -1,11 +1,7 @@
 package user;
 
 import bdd.BddConnection;
-import server.ServerThread;
-
 import javax.swing.*;
-import java.io.IOException;
-import java.net.Socket;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,8 +21,8 @@ public class Room implements Subject{
 
     /**
      * Constructeur de Room
-     * @param id
-     * @param bddConnection
+     * @param id Id de l'utilisateur de la room
+     * @param bddConnection La connection de l'utilisateur à la bdd
      */
     public Room(int id, BddConnection bddConnection ){
         userGroup = new ArrayList<Group>();
@@ -43,11 +39,11 @@ public class Room implements Subject{
 
     /**
      * Récupère les messages d'un groupe sélectionné et de les ajouter à messageList 
-     * @param messageList
-     * @param groupId
-     * @param userId
-     * @param modelMessageGroupRoomSelected
-     * @throws SQLException
+     * @param messageList La list des message du groupe
+     * @param groupId L'id du groupe
+     * @param userId L'id de l'utilisateur du groupe
+     * @param modelMessageGroupRoomSelected La DefaultListModel du groupe
+     * @throws SQLException Les erreurs sql
      */
     public void getMessageGroup(List<Message> messageList, int groupId, int userId, DefaultListModel modelMessageGroupRoomSelected) throws SQLException {
         int numberOfMessage;
@@ -62,8 +58,8 @@ public class Room implements Subject{
 
     /**
      * Récupère les groupes de l'utilisateur connecté et les ajoute à une defaultListModel qui sera affiché dans la room
-     * @param model
-     * @throws SQLException
+     * @param model La DefaultListModel
+     * @throws SQLException Les erreurs sql
      */
     public void getListModel(DefaultListModel model) throws SQLException {
         userGroup.clear();
@@ -81,8 +77,8 @@ public class Room implements Subject{
 
     /**
      * Récupère tous les membres liés au groupe sélectionné dans la guiRoom
-     * @param listMemberGroup
-     * @param modelParticipantGroup
+     * @param listMemberGroup La JList
+     * @param modelParticipantGroup La DefaultListModel
      */
     public void getMembersGroup(JList listMemberGroup, DefaultListModel modelParticipantGroup ){
         String tempIdGrp;
@@ -108,8 +104,8 @@ public class Room implements Subject{
 
     /**
      * Permet d'ajouter tous les utilisateurs présents dans la base de données (simplifie la création de groupe)
-     * @param usersMemberRoom
-     * @throws SQLException
+     * @param usersMemberRoom La DefaultListModel
+     * @throws SQLException Les erreurs sql
      */
     public void addListUserRoom(DefaultListModel usersMemberRoom) throws SQLException {
         memberPseudoRoom = bddConnection.allPseudoFromBase();
@@ -123,9 +119,9 @@ public class Room implements Subject{
 
     /**
      * Permet de créer un groupe
-     * @param groupName
-     * @param groupMember
-     * @throws SQLException
+     * @param groupName Le nom du groupe
+     * @param groupMember La liste des membres du groupe
+     * @throws SQLException Les erreurs sql
      */
     public void createGroup(String groupName , List<String> groupMember ) throws SQLException {
         Connection conn;
@@ -143,8 +139,8 @@ public class Room implements Subject{
 
     /**
      * Permet de récupérer le tag (id) d'un membre pour par la suite pouvoir l'insérer dans la base de données
-     * @param groupMember
-     * @return
+     * @param groupMember La liste des membres d'un groupe
+     * @return idMemberNewGroup
      */
     public List<Integer> idFromPseudo ( List<String> groupMember){
         List<Integer> idMemberNewGroup = new ArrayList<Integer>();
@@ -160,8 +156,8 @@ public class Room implements Subject{
 
     /**
      * Permet de récupérer le pseudo d'un membre
-     * @param groupMember
-     * @return
+     * @param groupMember  Le pseudo d'un membre du groupe
+     * @return pseudoMemberNewGroup
      */
     public List<String> stringFromPseudo( List<String> groupMember ){
         List<String> pseudoMemberNewGroup = new ArrayList<String>();
@@ -179,8 +175,8 @@ public class Room implements Subject{
 
     /**
      * Permet de récupérer les messages du groupe sélectionner dans GuiRoom
-     * @param idGroupe
-     * @param messagesList
+     * @param idGroupe L'id du groupe
+     * @param messagesList Une list de type Message
      */
     public void getGroupMessages(int idGroupe, List<Message> messagesList){
 
@@ -190,8 +186,8 @@ public class Room implements Subject{
 
     /**
      * Permet de récupérer l'Id du groupe sélectionné dans GuiRoom
-     * @param listMemberGroup
-     * @return
+     * @param listMemberGroup La JList
+     * @return tempIdGrp
      */
     public int getIdSelectedGroup(JList listMemberGroup){
         String tempIdGrp;
@@ -203,9 +199,9 @@ public class Room implements Subject{
 
 
     /**
-     *
-     * @param idUser
-     * @return
+     * Récupère le pseudo d'un utilisateur à partir de son ID
+     * @param idUser L'id d'un utilisateur
+     * @return bddConnection.givePseudoFromId(idUser) ou null
      */
     public String idToPseudo(int idUser){
 
@@ -219,11 +215,11 @@ public class Room implements Subject{
 
 
     /**
-     *
-     * @param id
-     * @param idSelectedGroup
-     * @param message
-     * @param timeStamp
+     * Appel la BDD pour inserer un message
+     * @param id L'id d'un utilisateur
+     * @param idSelectedGroup L'id du groupe sélectionner
+     * @param message Le message (textuel)
+     * @param timeStamp La date de l'envoie du message
      */
     public void sendMessageToServerConnection(int id, int idSelectedGroup, String message, String timeStamp) {
 
@@ -237,8 +233,8 @@ public class Room implements Subject{
 
 
     /**
-     *
-     * @param message
+     * Envoie une notification à l'observeur et lui envoie un message
+     * @param message Le message
      */
     public void sendMessage(Message message) {
         notifyObservers(message);
@@ -246,8 +242,8 @@ public class Room implements Subject{
 
 
     /**
-     *
-     * @param idGroup
+     * Envoie une notification à l'observeur et lui envoie idGroup
+     * @param idGroup L'id du groupe
      */
     public void sendIdGroup(int idGroup) {
         notifyObservers(idGroup);
@@ -255,8 +251,8 @@ public class Room implements Subject{
 
 
     /**
-     *
-     * @param idGroup
+     * Envoie une notification à simpleClient et lui envoie l'idGroup
+     * @param idGroup L'id du groupe
      */
     private void notifyObservers(int idGroup) {
         System.out.println("notify observers ");
@@ -267,28 +263,17 @@ public class Room implements Subject{
 
 
     /**
-     *
-     * @param o
+     * Ajoute un observers à ArrayList<Observer> observers
+     * @param o Observer
      */
     @Override
     public void registerObserver(Observer o) {
         observers.add(o);
     }
 
-
-    /**
-     *
-     * @param o
-     */
-    @Override
-    public void removeObserver(Observer o) {
-
-    }
-
-
-    /**
-     *
-     * @param message
+     /**
+     * Envoie une notification à simpleClient et lui envoie le message
+     * @param message Le message
      */
     @Override
     public void notifyObservers(Message message) {
@@ -301,8 +286,8 @@ public class Room implements Subject{
 
 
     /**
-     *
-     * @param message
+     * Appel la BDD pour éffacer un message
+     * @param message Le message
      */
     public void deleteMessage(Message message) {
         bddConnection.deleteUserMessage(message);

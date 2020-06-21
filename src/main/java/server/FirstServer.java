@@ -1,8 +1,6 @@
 package server;
 
-import org.h2.tools.Server;
 
-import javax.swing.*;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -15,8 +13,8 @@ public class FirstServer extends AbstractServer
 	private List<ServerThread> clientConnectionList = new ArrayList<>();
 
 	/**
-	 *
-	 * @param ip
+	 * Permet la connection d'un client au serveur
+	 * @param ip l'ip du serveur
 	 */
 	public void connect(String ip) {
 		try {
