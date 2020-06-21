@@ -19,6 +19,7 @@ public class SimpleClient implements Observer{
 	private ArrayList<Observer> observers;
 	private JTextArea chatArea;
 	private String ip;
+	private int idGroup;
 
 	/**
 	 *
@@ -55,6 +56,10 @@ public class SimpleClient implements Observer{
 		}
 	}
 
+	@Override
+	public void sendIdGroup(int idGroup) {
+		this.idGroup = idGroup;
+	}
 
 
 	Thread t = new Thread() {
@@ -64,8 +69,9 @@ public class SimpleClient implements Observer{
 					Message message = (Message) input.readObject();
 					if(message == null)
 						break;
-					chatArea.append(message.getUser().getPseudo() + "#" + message.getUser().getId() + " " + message.getPostDate() + "\n" + message.getMessage() + "\n\n");
-					//chatArea.append(message.getMessage() + "\n");
+					if(idGroup == message.getGroupID()) {
+						chatArea.append(message.getUser().getPseudo() + "#" + message.getUser().getId() + " " + message.getPostDate() + "\n" + message.getMessage() + "\n\n");
+					}//chatArea.append(message.getMessage() + "\n");
 				}
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();

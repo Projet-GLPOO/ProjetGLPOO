@@ -193,6 +193,16 @@ public class Room implements Subject{
     public void sendMessage(Message message) {
         notifyObservers(message);
     }
+    public void sendIdGroup(int idGroup) {
+        notifyObservers(idGroup);
+    }
+
+    private void notifyObservers(int idGroup) {
+        System.out.println("notify observers ");
+        for (Observer o : observers) {
+            o.sendIdGroup(idGroup);
+        }
+    }
 
     /**
      *

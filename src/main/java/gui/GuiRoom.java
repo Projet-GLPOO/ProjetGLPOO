@@ -114,6 +114,11 @@ public class GuiRoom implements ActionListener {
                 chatArea.setText("");
                 room.getMembersGroup(groupList,modelParticipantGroup);
                 room.getGroupMessages(room.getIdSelectedGroup(groupList), messagesList);
+                String tempIdGrp;
+                tempIdGrp = groupList.getSelectedValue().toString(); // Récupère le nom du groupe sélectionné
+                tempIdGrp = tempIdGrp.substring(tempIdGrp.indexOf("#") + 1, tempIdGrp.length()); //Dans le nom sélectionné récu
+                System.out.println(tempIdGrp);
+                room.sendIdGroup(Integer.parseInt(tempIdGrp));
                 showGroupMessages(messagesList);
             }
         };
