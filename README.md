@@ -7,6 +7,14 @@
 	-David Touitou
 	-David Xia
 
+## Outils de Développement
+
+# IDE
+IntelliJ
+
+# Base de données
+H2
+
 ## Lien GitHub
 
 https://github.com/Projet-GLPOO/ProjetGLPOO
