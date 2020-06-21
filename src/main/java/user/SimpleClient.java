@@ -15,9 +15,9 @@ public class SimpleClient implements Observer{
 	private int idGroup;
 
 	/**
-	 * Constructeur de SimpleClient qui permet d'initialiser d'initaliser l'input, l'output, le socket et le thread du client,
-	 * @param chatArea
-	 * @param ip
+	 * Constructeur de SimpleClient qui permet d'initialiser d'initaliser l'input, l'output, le socket et le thread du client
+	 * @param chatArea Zone de texte
+	 * @param ip Adresse IP de l'utilisateur
 	 */
 	public SimpleClient(JTextArea chatArea, String ip) {
 		this.ip = ip;
@@ -36,7 +36,7 @@ public class SimpleClient implements Observer{
 
 	/**
 	 * Envoie le message au serveur
-	 * @param message
+	 * @param message message
 	 */
 	@Override
 	public void send(Message message) {
@@ -51,7 +51,7 @@ public class SimpleClient implements Observer{
 
 	/**
 	 * Permet de recevoir le bon ID de groupe
-	 * @param idGroup
+	 * @param idGroup identifaction du groupe
 	 */
 	@Override
 	public void sendIdGroup(int idGroup) {

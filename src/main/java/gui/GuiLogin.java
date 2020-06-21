@@ -16,7 +16,7 @@ public class GuiLogin {
     private BddConnection bddConnection;
 
     /**
-     * Constructeur de GuiLOgin
+     * Constructeur de GuiLogin
      */
     public GuiLogin() {
         initialize();
@@ -51,7 +51,7 @@ public class GuiLogin {
 
         final Button buttonLogin = new Button("Login");
         /**
-         * Détecte le clique de l'utilisateur sur le bouton envoyé,
+         * Détecte le clique de l'utilisateur sur le bouton "Login",
          */
         buttonLogin.addMouseListener(new MouseAdapter() {
             /**
@@ -62,7 +62,7 @@ public class GuiLogin {
             public void mouseClicked(MouseEvent arg0) {
                 if(bddConnection.loginConnection(userNameField.getText(), String.valueOf(passwordField.getPassword())) && arg0.getSource()==buttonLogin) {
                     try {
-                        GuiRoom guiRoom = new GuiRoom(userNameField.getText(), String.valueOf(passwordField.getPassword()), bddConnection.giveId(userNameField.getText()), bddConnection);
+                        new GuiRoom(userNameField.getText(), String.valueOf(passwordField.getPassword()), bddConnection.giveId(userNameField.getText()), bddConnection);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }

@@ -109,7 +109,7 @@ public class BddConnection {
      * Récupère tous les groupes existant
      * @param listGroup La liste des groupes
      * @return listGroup
-     * @throws SQLException
+     * @throws SQLException erreur sql
      */
     public List<Group> giveGroups(List<Group> listGroup) throws SQLException {
         int groupeid;
@@ -224,7 +224,7 @@ public class BddConnection {
     }
 
     /**
-     * Rétoune tous les pseudo de la Base de données
+     * Retourne tous les pseudo de la Base de Données
      * @return listPseudo
      * @throws SQLException erreur sql
      */
@@ -250,7 +250,7 @@ public class BddConnection {
     }
 
     /**
-     * Rétoune tous les id de la base de données
+     * Retourne tous les id de la base de données
      * @return listIdUser
      * @throws SQLException erreur sql
      */
@@ -350,7 +350,7 @@ public class BddConnection {
     }
 
     /**
-     * Récupère tout les message de la base de données appartenant à un groupe et l'ajoute à la liste messageList
+     * Récupère tout les messages de la base de données appartenant à un groupe et l'ajoute à la liste messageList
      * @param groupId L'id du groupe
      * @param messageList Liste des messages de la base de données
      */
@@ -480,12 +480,11 @@ public class BddConnection {
     /**
      * Insert dans la base de données les message écrits par les utilisateurs
      * @param userid L'id de l'utilisateur
-     * @param selectedGroupId L'id du groupe sélectionner
+     * @param selectedGroupId L'id du groupe sélectionné
      * @param message Le message (textuel)
-     * @param timeStamp La date de l'envoie du message
      * @throws SQLException erreur sql
      */
-    public void sendMessageToBDD(int userid, int selectedGroupId, String message, String timeStamp) throws SQLException {
+    public void sendMessageToBDD(int userid, int selectedGroupId, String message) throws SQLException {
 
         PreparedStatement  stmt = conn.prepareStatement("Insert Into Messages values(?, ?, ?, sysdate)");
         try{

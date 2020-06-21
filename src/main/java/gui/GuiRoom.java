@@ -49,8 +49,6 @@ public class GuiRoom implements ActionListener {
         this.bddConnection = bddConnection;
         room = new Room(id, bddConnection );
         user.setId(id);
-        List<Integer> groupUserId = new ArrayList<Integer>();
-        List<String> groupUserPseudo = new ArrayList<String>();
         messagesList = new ArrayList<Message>();
         initialize();
     }
@@ -365,8 +363,10 @@ public class GuiRoom implements ActionListener {
 
         MouseListener mouseListenerMessage = new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                deleteMessageButton.setEnabled(true);
-                messageIndex = choiceMessageGroupJList.getSelectedIndex();
+                if(choiceMessageGroupJList.getSelectedValue() != null) {
+                    deleteMessageButton.setEnabled(true);
+                    messageIndex = choiceMessageGroupJList.getSelectedIndex();
+                }
             }
         };
         choiceMessageGroupJList.addMouseListener(mouseListenerMessage);
@@ -378,7 +378,7 @@ public class GuiRoom implements ActionListener {
 
     /**
      * Permet d'afficher les messages correpondant au groupe sélectionné
-     * @param messageList Liste de message
+     * @param messageList Liste de messages
      */
     public void showGroupMessages(List<Message> messageList){
 

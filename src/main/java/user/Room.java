@@ -38,7 +38,7 @@ public class Room implements Subject{
 
 
     /**
-     * Récupère les messages d'un groupe sélectionné et de les ajouter à messageList 
+     * Récupère les messages d'un groupe sélectionné et de les ajoute à messageList
      * @param messageList La list des message du groupe
      * @param groupId L'id du groupe
      * @param userId L'id de l'utilisateur du groupe
@@ -124,7 +124,6 @@ public class Room implements Subject{
      * @throws SQLException Les erreurs sql
      */
     public void createGroup(String groupName , List<String> groupMember ) throws SQLException {
-        Connection conn;
         int idGroup;
         List<Integer> listIdMemberNewGroup = new ArrayList<Integer>();
         listIdMemberNewGroup = idFromPseudo(groupMember);
@@ -174,9 +173,9 @@ public class Room implements Subject{
 
 
     /**
-     * Permet de récupérer les messages du groupe sélectionner dans GuiRoom
+     * Permet de récupérer les messages du groupe sélectionné dans GuiRoom
      * @param idGroupe L'id du groupe
-     * @param messagesList Une list de type Message
+     * @param messagesList Une liste de type Message
      */
     public void getGroupMessages(int idGroupe, List<Message> messagesList){
 
@@ -217,14 +216,14 @@ public class Room implements Subject{
     /**
      * Appel la BDD pour inserer un message
      * @param id L'id d'un utilisateur
-     * @param idSelectedGroup L'id du groupe sélectionner
+     * @param idSelectedGroup L'id du groupe sélectionné
      * @param message Le message (textuel)
-     * @param timeStamp La date de l'envoie du message
+     * @param timeStamp La date d'envoie du message
      */
     public void sendMessageToServerConnection(int id, int idSelectedGroup, String message, String timeStamp) {
 
         try {
-            bddConnection.sendMessageToBDD(id, idSelectedGroup, message, timeStamp);
+            bddConnection.sendMessageToBDD(id, idSelectedGroup, message);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -263,7 +262,7 @@ public class Room implements Subject{
 
 
     /**
-     * Ajoute un observers à ArrayList<Observer> observers
+     * Ajoute un observers à l'ArrayList observers
      * @param o Observer
      */
     @Override
@@ -286,7 +285,7 @@ public class Room implements Subject{
 
 
     /**
-     * Appel la BDD pour éffacer un message
+     * Appel la BDD pour effacer un message
      * @param message Le message
      */
     public void deleteMessage(Message message) {

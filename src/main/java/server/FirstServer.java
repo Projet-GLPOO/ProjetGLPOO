@@ -18,21 +18,20 @@ public class FirstServer extends AbstractServer
 	 */
 	public void connect(String ip) {
 		try {
-
-				//the server socket is defined only by a port (its IP is localhost)
+				//Le socket du serveur est seulement défini par un port (cet IP est le Localhost)
 				ss = new ServerSocket(6666);
 			while(true) {
 				System.out.println("Server waiting for connection...");
 				Socket socket = ss.accept();//establishes connection
 				System.out.println("Connected as " + ip);
-				// create a new thread to handle client socket
+				//Créer un nouveau thread pour gérer le socket Client
 				ServerThread serverThread = new ServerThread(socket, clientConnectionList);
 				clientConnectionList.add(serverThread);
 				new Thread(serverThread).start();
 			}
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
-			//if IOException close the server socket
+			//Si IOException fermé le socket du serveur
 			if (ss != null && !ss.isClosed()) {
 				try {
 					ss.close();

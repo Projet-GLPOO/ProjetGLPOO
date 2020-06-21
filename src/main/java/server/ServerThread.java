@@ -7,21 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This thread is responsible to handle client connection.
+ * Ce thread est responsable du maintient de la connexion client
  */
 public class ServerThread extends Thread {
     private Socket socket;
 	private ObjectInputStream input;
 	private ObjectOutputStream output;
 	private List<Socket> socketList;
-	List<ServerThread> clientConnectionList;
+	private List<ServerThread> clientConnectionList;
 
 	/**
 	 *
 	 * 	Constructeur de ServerThread
 	 *
 	 * @param socket le socket du serveur
-	 * @param clientConnectionList La liste des clients connecter
+	 * @param clientConnectionList La liste des clients connectés
 	 */
     public ServerThread(Socket socket, List<ServerThread> clientConnectionList) {
     	this.clientConnectionList = clientConnectionList;
@@ -43,8 +43,8 @@ public class ServerThread extends Thread {
 		Message message;
     	while(true) {
 			try {
-				//create the streams that will handle the objects coming through the sockets
-				message = (Message) input.readObject();  //read the object received through the stream and deserialize it
+				//créer les flux qui traiteront les objets passant par les sockets
+				message = (Message) input.readObject();  //lire l'objet reçu par le flux et le désérialiser
 				System.out.println("server received a text:" + message.getMessage());
 				for (ServerThread serverThread : clientConnectionList) {
 					serverThread.output.writeObject(message);

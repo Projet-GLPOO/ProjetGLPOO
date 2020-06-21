@@ -11,8 +11,8 @@ public class User implements Serializable {
 
     /**
      *
-     * @param pseudo
-     * @param mdp
+     * @param pseudo pseudo de l'utilisateur
+     * @param mdp mot de passe de l'utilisateur
      */
     public User(String pseudo, String mdp) {
         this.pseudo = pseudo;
@@ -22,7 +22,7 @@ public class User implements Serializable {
 
     /**
      *
-     * @return
+     * @return pseudo
      */
     public String getPseudo() {
         return pseudo;
@@ -31,7 +31,7 @@ public class User implements Serializable {
 
     /**
      *
-     * @param pseudo
+     * @param pseudo Pseudo de l'utilisateur
      */
     public void setPseudo(String pseudo) {
         this.pseudo = pseudo;
@@ -40,7 +40,7 @@ public class User implements Serializable {
 
     /**
      *
-     * @return
+     * @return mdp
      */
     public String getMdp() {
         return mdp;
@@ -49,7 +49,7 @@ public class User implements Serializable {
 
     /**
      *
-     * @return
+     * @return id
      */
     public int getId() {
         return id;
@@ -58,7 +58,7 @@ public class User implements Serializable {
 
     /**
      *
-     * @param id
+     * @param id identifiant de l'utilisateur
      */
     public void setId(int id) {
         this.id = id;

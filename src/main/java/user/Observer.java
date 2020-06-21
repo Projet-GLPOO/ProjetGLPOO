@@ -3,13 +3,13 @@ package user;
 public interface Observer{
     /**
      *
-     * @param message
+     * @param message message
      */
     void send(Message message);
 
     /**
      *
-     * @param idGroup
+     * @param idGroup identifiant du groupe
      */
     void sendIdGroup(int idGroup);
 }
