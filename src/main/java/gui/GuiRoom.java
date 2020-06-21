@@ -204,7 +204,11 @@ public class GuiRoom implements ActionListener {
                 break;
 
             case "DeleteMessage" :
-                createMessagedeletionFrame();
+                try {
+                    createMessageDeletionFrame();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
                 break;
         }
     }
@@ -286,17 +290,49 @@ public class GuiRoom implements ActionListener {
         });
 
     }
-    public void createMessagedeletionFrame(){
-        JFrame messageDeletionFrame = new JFrame();
+    public void createMessageDeletionFrame() throws SQLException {
+        final JFrame messageDeletionFrame = new JFrame();
 
-        messageDeletionFrame.setBounds(200, 200, 500, 500);
+        messageDeletionFrame.setBounds(200, 200, 650, 500);
         messageDeletionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         messageDeletionFrame.getContentPane().setLayout(null);
         messageDeletionFrame.setVisible(true);
 
-        final JTextArea chatAreaDeleteMessage = new JTextArea();
-        chatAreaDeleteMessage.setBounds(1, 175, 500, 100);
-        messageDeletionFrame.getContentPane().add(chatAreaDeleteMessage);
+
+        DefaultListModel modelGroupRoom = new DefaultListModel();
+        room.getDefaultListModel(modelGroupRoom);
+        final JList choiceGroupJList = new JList(modelGroupRoom);
+        JScrollPane choiceGroupJListJSchrollPane = new JScrollPane(choiceGroupJList);
+        choiceGroupJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        choiceGroupJListJSchrollPane.setBounds(225, 0, 175, 150);
+        messageDeletionFrame.getContentPane().add(choiceGroupJListJSchrollPane);
+
+        final List<Message>messageList = new ArrayList<Message>();
+        final DefaultListModel modelMessageGroupRoomSelected =  new DefaultListModel();
+        final JList choiceMessageGroupJList = new JList(modelMessageGroupRoomSelected);
+        final JScrollPane choiceMessageGroupJListJSchrollPane = new JScrollPane(choiceMessageGroupJList);
+        choiceMessageGroupJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        choiceMessageGroupJListJSchrollPane.setBounds(0, 175, 640, 100);
+        messageDeletionFrame.getContentPane().add(choiceMessageGroupJListJSchrollPane);
+
+
+
+        MouseListener mouseListener = new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                modelMessageGroupRoomSelected.clear();
+                String tempIdGrp;
+                tempIdGrp = choiceGroupJList.getSelectedValue().toString(); // Récupère le nom du groupe sélectionné
+                tempIdGrp = tempIdGrp.substring(tempIdGrp.indexOf("#") + 1, tempIdGrp.length());
+                try {
+                    room.getMessageGroup(messageList, Integer.parseInt(tempIdGrp), user.getId(), modelMessageGroupRoomSelected);
+                    choiceMessageGroupJList.setModel(modelMessageGroupRoomSelected);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        };
+        choiceGroupJList.addMouseListener(mouseListener);
     }
 
 

@@ -330,6 +330,59 @@ public class BddConnection {
         }
     }
 
+    //Envoie les messages de l'utilisateur pour  le groupe séelectionné
+    public void giveUserMessagesfromGroupSelected(int userId, int groupId, List<Message>messageList) {
+
+        String text;
+        String date;
+        Message message;
+        try {
+            messageList.clear();
+            PreparedStatement stmt = conn.prepareStatement("Select * from Messages WHERE Groupeid = ? AND utilisateurId = ?");
+            try {
+                stmt.setInt(1, groupId);
+                stmt.setInt(2, userId);
+                ResultSet r = stmt.executeQuery();
+                while (r.next()) {
+
+                    text = r.getString("message");
+                    date = r.getString("datePoste");
+                    message = new Message(userId, groupId, text, date);
+
+                    messageList.add(message);
+                }
+                conn.commit();
+            } catch (Exception e) {
+                conn.rollback();
+            }
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Permet de supprimer le message de l'utilisateur
+    public void deleteUserMessages(Message message) {
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM Messages WHERE (utilisateurId = ? AND groupeid = ? AND message = ? AND dateposte = ?");
+            try {
+                stmt.setInt(1, message.getUserID());
+                stmt.setInt(2, message.getGroupID());
+                stmt.setString(3, message.getMessage());
+                stmt.setString(4, message.getPostDate());
+                ResultSet r = stmt.executeQuery();
+
+                conn.commit();
+            } catch (Exception e) {
+                conn.rollback();
+            }
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public String givePseudoFromId(int userid) throws SQLException {
 
@@ -370,6 +423,28 @@ public class BddConnection {
         }
         stmt.close();
 
+    }
+
+    public int getMessageNumberOfUser(int userId, int groupId) throws SQLException {
+        int numberOfMessage = 0;
+        PreparedStatement stmt = conn.prepareStatement("Select count(*) from Messages where groupeid = ? AND UtilisateurId = ?");
+        try{
+
+            stmt.setInt(1, groupId);
+            stmt.setInt(2, userId);
+
+            ResultSet r = stmt.executeQuery();
+
+            while(r.next()) {
+                numberOfMessage = r.getInt("COUNT(*)");
+            }
+            conn.commit();
+        }
+        catch(Exception e){
+            conn.rollback();
+        }
+        stmt.close();
+        return numberOfMessage;
     }
 }
 

@@ -41,6 +41,19 @@ public class Room implements Subject{
         observers = new ArrayList<Observer>();
     }
 
+    //listMessage
+    //groupeid
+    //userid
+    //model
+    public void getMessageGroup(List<Message> messageList, int groupId, int userId, DefaultListModel modelMessageGroupRoomSelected) throws SQLException {
+        int numberOfMessage;
+        numberOfMessage = bddConnection.getMessageNumberOfUser(userId, groupId);
+        for(int i = 0; i < numberOfMessage; i++){
+            bddConnection.giveUserMessagesfromGroupSelected(userId, groupId, messageList);
+            modelMessageGroupRoomSelected.addElement(messageList.get(i).getMessage());
+        }
+
+    }
 
 
     //Récupère les groupes de l'utilisateur connecté et les ajoute à une defaultListModel qui sera affiché dans la room
