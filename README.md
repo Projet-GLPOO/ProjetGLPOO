@@ -44,3 +44,4 @@ Pour connecter plusieurs clients, il vous suffit de rentrer différents username
 	-Possibilité de créer un groupe sans limite de participants à la différence de ce qui avit été prévue
 	-Possibilité de se connecter de façon simultanée au compte d'un même utilisateur.
 	-Nécessité de cliquer plusieurs fois sur login, car bug sporadique d'input.
+	-Le script Maven ne fonctionne pas dû à un warning lors de la compilation.
