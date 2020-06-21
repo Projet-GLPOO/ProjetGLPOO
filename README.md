@@ -9,10 +9,10 @@
 
 ## Outils de Développement
 
-# IDE
+### IDE
 IntelliJ
 
-# Base de données
+### Base de données
 H2
 
 ## Lien GitHub
